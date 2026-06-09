@@ -58,6 +58,17 @@ a{color:inherit;text-decoration:none}
 .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .card-title{font-size:18px;font-weight:600}
 .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:9px;padding:7px 12px;font-size:13px;font-weight:500;color:#48505e;background:#fff;cursor:pointer}
+.dd{position:relative;display:inline-block}
+.dd-toggle{font-family:inherit}
+.dd .chev{transition:transform .2s}
+.dd.open .chev{transform:rotate(180deg)}
+.dd-menu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line2);
+  border-radius:11px;box-shadow:0 14px 34px -14px rgba(0,30,90,.3);padding:6px;min-width:140px;z-index:40;display:none}
+.dd.open .dd-menu{display:block}
+.dd-menu button{display:block;width:100%;text-align:left;padding:9px 12px;border:none;background:none;
+  font-family:inherit;font-size:13.5px;color:#3c4655;border-radius:8px;cursor:pointer}
+.dd-menu button:hover{background:#f3f7fc}
+.dd-menu button.sel{color:var(--blue);font-weight:600;background:#eef5ff}
 .legend-inline{display:flex;align-items:center;gap:18px;font-size:13px;color:#48505e}
 .legend-inline .lg{display:flex;align-items:center;gap:7px}
 .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
@@ -171,7 +182,7 @@ a{color:inherit;text-decoration:none}
       <div class="card c-patrimoine">
         <div class="card-head">
           <span class="card-title">Patrimoine Brut</span>
-          <span class="pill">Mois <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+          <div class="dd" id="ddPatrimoine"><button class="pill dd-toggle" type="button"><span class="dd-label">Mois</span> <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
         </div>
         <div class="chart-box" id="chartPatrimoine"></div>
       </div>
@@ -185,7 +196,7 @@ a{color:inherit;text-decoration:none}
               <span class="lg"><span class="dot" style="background:var(--bright)"></span>Revenus</span>
               <span class="lg"><span class="dot" style="background:var(--blue)"></span>Dépenses</span>
             </div>
-            <span class="pill">Mois <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+            <div class="dd" id="ddRevenus"><button class="pill dd-toggle" type="button"><span class="dd-label">Mois</span> <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
           </div>
         </div>
         <div class="chart-box" id="chartRevenus"></div>
@@ -237,105 +248,119 @@ a{color:inherit;text-decoration:none}
  
 <script>
 const BLUE='#004AAD', BRIGHT='#0BA5FF', LIGHT='#9DDBFF', GRID='#eef1f6', AXIS='#9aa3b2';
-const months=['Jan','Fev','Mar','Avr','Mai','Jui','Jui','Aou','Sep','Oct','Nov','Dec'];
- 
 function el(html){const d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild;}
+const patrFmt = v=>String(v).padStart(2,'0')+'K';
+const kFmt = v=> v===0 ? '0' : (Number.isInteger(v)? v+'K' : String(v).replace('.',',')+'K');
  
-/* ---- Area line: Patrimoine Brut ---- */
-function areaChart(target,data,yMax,yStep,yfmt){
-  const W=760,H=300,L=46,R=14,T=18,B=30;
-  const pw=W-L-R, ph=H-T-B;
-  const n=data.length;
-  const x=i=>L+pw*(i/(n-1));
+/* ---- Area line ---- */
+function areaChart(target,cfg){
+  target.innerHTML='';
+  const {labels,data,yMax,yStep,yfmt}=cfg;
+  const W=760,H=300,L=46,R=14,T=18,B=30, pw=W-L-R, ph=H-T-B, n=data.length;
+  const x=i=> n===1 ? L+pw/2 : L+pw*(i/(n-1));
   const y=v=>T+ph*(1-v/yMax);
-  // smooth path (catmull-rom -> bezier)
   const pts=data.map((v,i)=>[x(i),y(v)]);
   let d='M'+pts[0][0]+','+pts[0][1];
   for(let i=0;i<pts.length-1;i++){
     const p0=pts[i-1]||pts[i], p1=pts[i], p2=pts[i+1], p3=pts[i+2]||p2;
-    const c1x=p1[0]+(p2[0]-p0[0])/6, c1y=p1[1]+(p2[1]-p0[1])/6;
-    const c2x=p2[0]-(p3[0]-p1[0])/6, c2y=p2[1]-(p3[1]-p1[1])/6;
-    d+=' C'+c1x+','+c1y+' '+c2x+','+c2y+' '+p2[0]+','+p2[1];
+    d+=' C'+(p1[0]+(p2[0]-p0[0])/6)+','+(p1[1]+(p2[1]-p0[1])/6)+' '+(p2[0]-(p3[0]-p1[0])/6)+','+(p2[1]-(p3[1]-p1[1])/6)+' '+p2[0]+','+p2[1];
   }
   const area=d+` L${x(n-1)},${T+ph} L${x(0)},${T+ph} Z`;
   let grid='',ylab='';
-  for(let v=0;v<=yMax;v+=yStep){
+  for(let i=0;i<=Math.round(yMax/yStep);i++){ const v=Math.round(i*yStep*1000)/1000;
     grid+=`<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="${GRID}"/>`;
     ylab+=`<text x="${L-10}" y="${y(v)+4}" text-anchor="end" fill="${AXIS}" font-size="12">${yfmt(v)}</text>`;
   }
   let vgrid='',xlab='';
-  data.forEach((_,i)=>{
+  labels.forEach((lb,i)=>{
     vgrid+=`<line x1="${x(i)}" y1="${T}" x2="${x(i)}" y2="${T+ph}" stroke="${GRID}" opacity=".6"/>`;
-    xlab+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${months[i]}</text>`;
+    if(lb)xlab+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${lb}</text>`;
   });
   target.appendChild(el(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="agrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="${BLUE}" stop-opacity=".18"/><stop offset="1" stop-color="${BLUE}" stop-opacity="0"/>
-    </linearGradient></defs>
-    ${grid}${vgrid}
-    <path d="${area}" fill="url(#agrad)"/>
-    <path d="${d}" fill="none" stroke="${BLUE}" stroke-width="2.5" stroke-linejoin="round"/>
-    ${ylab}${xlab}
+    <defs><linearGradient id="agrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${BLUE}" stop-opacity=".18"/><stop offset="1" stop-color="${BLUE}" stop-opacity="0"/></linearGradient></defs>
+    ${grid}${vgrid}<path d="${area}" fill="url(#agrad)"/><path d="${d}" fill="none" stroke="${BLUE}" stroke-width="2.5" stroke-linejoin="round"/>${ylab}${xlab}
   </svg>`));
 }
-areaChart(document.getElementById('chartPatrimoine'),
-  [19,26,31,29,21,19,27,37,33,28,30,35],50,10,v=>String(v).padStart(2,'0')+'K');
  
-/* ---- Grouped bars: Revenus & Dépenses ---- */
-(function(){
-  const target=document.getElementById('chartRevenus');
-  const rev=[1.8,1.95,1.7,1.95,1.6,2.3,1.85,1.85,2.05,2.1,1.6,1.8];
-  const dep=[1.5,1.5,1.2,2.25,1.65,1.75,1.9,1.5,1.6,1.6,1.65,2.25];
-  const W=760,H=320,L=42,R=12,T=18,B=30, yMax=2.5,yStep=.5;
-  const pw=W-L-R, ph=H-T-B, n=rev.length;
+/* ---- Grouped bars ---- */
+function barChart(target,cfg){
+  target.innerHTML='';
+  const {labels,rev,dep,yMax,yStep,yfmt}=cfg;
+  const W=760,H=320,L=44,R=12,T=18,B=30, pw=W-L-R, ph=H-T-B, n=rev.length;
   const y=v=>T+ph*(1-v/yMax);
-  const slot=pw/n, bw=8.5, gap=3, grpW=bw*2+gap;
+  const slot=pw/n, gap=Math.max(2,slot*0.07), grpW=slot*0.5, bw=(grpW-gap)/2;
   let grid='',ylab='',xlab='',bars='';
-  for(let v=0;v<=yMax+1e-9;v+=yStep){
+  for(let i=0;i<=Math.round(yMax/yStep);i++){ const v=Math.round(i*yStep*1000)/1000;
     grid+=`<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="${GRID}"/>`;
-    const lab=v===0?'0':(Math.abs(v%1)<1e-9?v+'K':String(v).replace('.',',')+'K');
-    ylab+=`<text x="${L-9}" y="${y(v)+4}" text-anchor="end" fill="${AXIS}" font-size="12">${lab}</text>`;
+    ylab+=`<text x="${L-9}" y="${y(v)+4}" text-anchor="end" fill="${AXIS}" font-size="12">${yfmt(v)}</text>`;
   }
-  function bar(cx,v,color){
-    const top=y(v), h=T+ph-top, r=Math.min(bw/2,h);
-    return `<path d="M${cx},${top+r} a${r},${r} 0 0 1 ${bw},0 L${cx+bw},${T+ph} L${cx},${T+ph} Z" fill="${color}"/>`;
-  }
+  function bar(cx,v,color){const top=y(v),h=T+ph-top,r=Math.min(bw/2,h);
+    return `<path d="M${cx},${top+r} a${r},${r} 0 0 1 ${bw},0 L${cx+bw},${T+ph} L${cx},${T+ph} Z" fill="${color}"/>`;}
   rev.forEach((rv,i)=>{
-    const c=L+slot*i+slot/2;
-    const x0=c-grpW/2;
+    const c=L+slot*i+slot/2, x0=c-grpW/2;
     bars+=bar(x0,rv,BRIGHT)+bar(x0+bw+gap,dep[i],BLUE);
-    xlab+=`<text x="${c}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${months[i]}</text>`;
+    xlab+=`<text x="${c}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${labels[i]}</text>`;
   });
   target.appendChild(el(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${bars}${ylab}${xlab}</svg>`));
-})();
+}
  
-/* ---- Donut: Répartition ---- */
+/* ---- Datasets per period ---- */
+const MONTHS=['Jan','Fev','Mar','Avr','Mai','Jui','Jui','Aou','Sep','Oct','Nov','Dec'];
+const DAYS=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const YEARS=['2021','2022','2023','2024','2025','2026'];
+const WEEKS=['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10'];
+ 
+const PATR={
+  mois:{labels:MONTHS,data:[19,26,31,29,21,19,27,37,33,28,30,35],yMax:50,yStep:10,yfmt:patrFmt},
+  semaine:{labels:WEEKS,data:[33,34,33.5,35,36,35,34,35.5,37,38],yMax:50,yStep:10,yfmt:patrFmt},
+  annee:{labels:YEARS,data:[12,17,23,28,33,38],yMax:50,yStep:10,yfmt:patrFmt}
+};
+const REV={
+  mois:{labels:MONTHS,rev:[1.8,1.95,1.7,1.95,1.6,2.3,1.85,1.85,2.05,2.1,1.6,1.8],dep:[1.5,1.5,1.2,2.25,1.65,1.75,1.9,1.5,1.6,1.6,1.65,2.25],yMax:2.5,yStep:.5,yfmt:kFmt},
+  semaine:{labels:DAYS,rev:[0.3,0.45,0.2,0.6,0.5,0.7,0.25],dep:[0.25,0.3,0.35,0.4,0.3,0.55,0.2],yMax:0.8,yStep:.2,yfmt:kFmt},
+  annee:{labels:YEARS,rev:[18,21,24,22,26,28],dep:[15,17,19,20,21,24],yMax:30,yStep:6,yfmt:kFmt}
+};
+ 
+const patrTarget=document.getElementById('chartPatrimoine');
+const revTarget=document.getElementById('chartRevenus');
+areaChart(patrTarget,PATR.mois);
+barChart(revTarget,REV.mois);
+ 
+/* ---- Dropdown component ---- */
+function makeDropdown(id,onChange){
+  const dd=document.getElementById(id);
+  const toggle=dd.querySelector('.dd-toggle');
+  const label=dd.querySelector('.dd-label');
+  const menu=dd.querySelector('.dd-menu');
+  const opts=[['mois','Mois'],['semaine','Semaine'],['annee','Année']];
+  let cur='mois';
+  menu.innerHTML=opts.map(([v,l])=>`<button type="button" data-v="${v}"${v===cur?' class="sel"':''}>${l}</button>`).join('');
+  toggle.addEventListener('click',e=>{e.stopPropagation();
+    document.querySelectorAll('.dd.open').forEach(o=>{if(o!==dd)o.classList.remove('open')});
+    dd.classList.toggle('open');});
+  menu.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    cur=b.dataset.v; label.textContent=b.textContent;
+    menu.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b));
+    dd.classList.remove('open'); onChange(cur);
+  }));
+}
+document.addEventListener('click',()=>document.querySelectorAll('.dd.open').forEach(o=>o.classList.remove('open')));
+makeDropdown('ddPatrimoine',p=>areaChart(patrTarget,PATR[p]));
+makeDropdown('ddRevenus',p=>barChart(revTarget,REV[p]));
+ 
+/* ---- Donut ---- */
 (function(){
   const seg=[[21.4,LIGHT],[7.2,BRIGHT],[71.4,BLUE]];
-  const cx=80,cy=80,r=60,sw=22,C=2*Math.PI*r;
-  let off=0,arcs='';
-  seg.forEach(([p,col])=>{
-    const len=C*p/100;
-    arcs+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}"
-      stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}"/>`;
-    off+=len;
-  });
-  document.getElementById('chartDonut').appendChild(el(
-    `<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-      <g transform="rotate(-90 ${cx} ${cy})">${arcs}</g></svg>`));
+  const cx=80,cy=80,r=60,sw=22,C=2*Math.PI*r; let off=0,arcs='';
+  seg.forEach(([p,col])=>{const len=C*p/100;
+    arcs+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}"/>`;off+=len;});
+  document.getElementById('chartDonut').appendChild(el(`<svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"><g transform="rotate(-90 ${cx} ${cy})">${arcs}</g></svg>`));
 })();
  
-/* ---- Semicircle gauge: Remboursement ---- */
+/* ---- Gauge ---- */
 (function(){
-  const cx=120,cy=124,r=92,sw=22;
-  const path=`M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}`; // top semicircle
-  const Llen=Math.PI*r, pct=0.08;
-  document.getElementById('chartGauge').appendChild(el(
-    `<svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
-      <path d="${path}" fill="none" stroke="${BLUE}" stroke-width="${sw}" stroke-linecap="round"/>
-      <path d="${path}" fill="none" stroke="${BRIGHT}" stroke-width="${sw}" stroke-linecap="round"
-        stroke-dasharray="${Llen*pct} ${Llen}"/>
-    </svg>`));
+  const cx=120,cy=124,r=92,sw=22, path=`M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}`, Llen=Math.PI*r, pct=0.08;
+  document.getElementById('chartGauge').appendChild(el(`<svg viewBox="0 0 240 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet"><path d="${path}" fill="none" stroke="${BLUE}" stroke-width="${sw}" stroke-linecap="round"/><path d="${path}" fill="none" stroke="${BRIGHT}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${Llen*pct} ${Llen}"/></svg>`));
 })();
  
 /* ---- Transactions ---- */
@@ -345,20 +370,9 @@ areaChart(document.getElementById('chartPatrimoine'),
     out:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>',
     in:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7 17 17M17 9v8H9"/></svg>'
   };
-  const data=[
-    ['card','22/03/2026','Carte bancaire','22,41 €'],
-    ['out','21/03/2026','Virement sortant','220 €'],
-    ['in','17/03/2026','Virement entrant','305 €'],
-    ['card','10/03/2026','Carte bancaire','108,37 €'],
-    ['out','06/03/2026','Virement sortant','260 €'],
-    ['out','03/03/2026','Virement sortant','750 €'],
-    ['in','01/03/2026','Virement entrant','1867,31 €']
-  ];
+  const data=[['card','22/03/2026','Carte bancaire','22,41 €'],['out','21/03/2026','Virement sortant','220 €'],['in','17/03/2026','Virement entrant','305 €'],['card','10/03/2026','Carte bancaire','108,37 €'],['out','06/03/2026','Virement sortant','260 €'],['out','03/03/2026','Virement sortant','750 €'],['in','01/03/2026','Virement entrant','1867,31 €']];
   const cls={card:'card-pay',out:'out',in:'in'};
-  document.getElementById('txnList').innerHTML=data.map(t=>
-    `<div class="txn"><div class="tic ${cls[t[0]]}">${ICONS[t[0]]}</div>`+
-    `<div class="info"><div class="date">${t[1]}</div><div class="type">${t[2]}</div></div>`+
-    `<div class="amt">${t[3]}</div></div>`).join('');
+  document.getElementById('txnList').innerHTML=data.map(t=>`<div class="txn"><div class="tic ${cls[t[0]]}">${ICONS[t[0]]}</div><div class="info"><div class="date">${t[1]}</div><div class="type">${t[2]}</div></div><div class="amt">${t[3]}</div></div>`).join('');
 })();
 </script>
 </body>
