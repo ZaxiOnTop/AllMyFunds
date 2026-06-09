@@ -1,3 +1,6 @@
+
+raw
+Auth · HTML
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -264,11 +267,12 @@ a{color:inherit;text-decoration:none}
     });
   });
  
-  // demo submit
-  fLogin.addEventListener('submit',function(e){e.preventDefault();document.getElementById('note-login').classList.add('show');});
-  fSignup.addEventListener('submit',function(e){e.preventDefault();document.getElementById('note-signup').classList.add('show');});
+  // redirect to dashboard on auth success
+  function goDash(e){ if(e)e.preventDefault(); window.location.href='dashboard.html'; }
+  fLogin.addEventListener('submit',goDash);
+  fSignup.addEventListener('submit',goDash);
+  document.querySelectorAll('.btn-social').forEach(function(b){ b.addEventListener('click',goDash); });
 })();
 </script>
 </body>
 </html>
- 
