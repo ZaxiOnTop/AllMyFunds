@@ -41,7 +41,7 @@ a{color:inherit;text-decoration:none}
  
 /* ---------- Main ---------- */
 .main{display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden}
-.topbar{display:flex;align-items:center;gap:20px;padding:18px 32px;background:var(--bg);flex:0 0 auto}
+.topbar{display:flex;align-items:center;gap:20px;padding:18px 32px;background:#fff;border-bottom:1px solid var(--line);flex:0 0 auto}
 .topbar h1{font-size:24px;font-weight:700;letter-spacing:-.3px;flex:0 0 auto}
 .search{margin-left:auto;position:relative;width:300px}
 .search input{width:100%;height:44px;border:1px solid var(--line2);border-radius:11px;background:#fff;padding:0 42px 0 16px;font-family:inherit;font-size:14px}
@@ -51,13 +51,17 @@ a{color:inherit;text-decoration:none}
 .avatar{width:44px;height:44px;border-radius:50%;flex:0 0 auto;background:linear-gradient(135deg,#f0c9a8,#e8b48a);display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
 .avatar svg{width:30px;height:30px}
  
-.content{padding:6px 32px 24px;display:flex;gap:22px;align-items:stretch;flex:1;min-height:0}
-.col-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:22px;min-height:0}
-.col-right{flex:0 0 360px;width:360px;display:flex;flex-direction:column;gap:16px;min-height:0}
+.content{padding:6px 32px 24px;display:grid;grid-template-columns:1fr 360px;grid-template-rows:1fr 1fr;
+  gap:22px;grid-template-areas:"patr righttop" "rev txn";flex:1;min-height:0}
+.c-patrimoine{grid-area:patr}
+.rt-wrap{grid-area:righttop;display:flex;flex-direction:column;gap:22px;min-height:0}
+.c-revenus{grid-area:rev}
+.c-transactions{grid-area:txn}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 24px;display:flex;flex-direction:column;min-height:0}
-.c-patrimoine,.c-revenus{flex:1}
-.c-transactions{flex:1}
-.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.rt-wrap .card{flex:1;padding:16px 22px;justify-content:center}
+.c-repartition{flex:0.88}
+.c-credit{flex:1.12}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;margin-bottom:10px}
 .card-title{font-size:18px;font-weight:600}
 .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);border-radius:9px;padding:7px 12px;font-size:13px;font-weight:500;color:#48505e;background:#fff;cursor:pointer}
 .dd{position:relative;display:inline-block}
@@ -82,15 +86,15 @@ a{color:inherit;text-decoration:none}
 #txnList{flex:1;min-height:0;overflow-y:auto}
  
 /* repartition */
-.donut-row{display:flex;align-items:center;gap:18px}
-.donut-wrap{position:relative;width:124px;height:124px;flex:0 0 auto}
-.donut-legend{display:flex;flex-direction:column;gap:14px;font-size:13.5px;color:#3c4655;white-space:nowrap}
+.donut-row{display:flex;align-items:center;gap:18px;min-width:0}
+.donut-wrap{position:relative;width:104px;height:104px;flex:0 0 auto}
+.donut-legend{display:flex;flex-direction:column;gap:14px;font-size:13.5px;color:#3c4655;white-space:nowrap;min-width:0}
 .donut-legend .lg{display:flex;align-items:center;gap:10px}
  
 /* gauge */
-.gauge-wrap{position:relative;width:100%;max-width:250px;margin:2px auto 0;height:108px}
-.gauge-val{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);font-size:19px;font-weight:700}
-.gauge-legend{display:flex;justify-content:center;gap:22px;margin-top:26px;font-size:13px;color:#3c4655}
+.gauge-wrap{position:relative;width:100%;max-width:196px;margin:0 auto;height:82px}
+.gauge-val{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);font-size:18px;font-weight:700}
+.gauge-legend{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 20px;margin-top:24px;font-size:12.5px;color:#3c4655}
 .gauge-legend .lg{display:flex;align-items:center;gap:8px}
  
 /* transactions */
@@ -118,14 +122,16 @@ a{color:inherit;text-decoration:none}
   .search{display:none}
   .topbar>.icon-btn{margin-left:auto}
   .content{display:flex;flex-direction:column;padding:6px 16px 96px;gap:16px;flex:none}
-  .col-left,.col-right{display:contents}
-  .c-patrimoine{order:1}.c-repartition{order:2}.c-credit{order:3}.c-revenus{order:4}.c-transactions{order:5}
-  .c-patrimoine,.c-revenus,.c-transactions{flex:none}
-  .chart-box{flex:none}
-  .chart-box svg{height:auto}
+  .rt-wrap{display:contents}
+  .c-patrimoine,.c-revenus,.c-transactions,.rt-wrap .card{flex:none}
+  .chart-box{flex:none;height:230px}
+  .chart-box svg{height:100%}
   #txnList{overflow:visible}
   .card{border-radius:18px;padding:20px}
-  .donut-wrap{width:130px;height:130px}
+  .rt-wrap .card{padding:20px;justify-content:flex-start}
+  .donut-wrap{width:clamp(96px,26vw,128px);height:clamp(96px,26vw,128px)}
+  .gauge-wrap{height:120px;max-width:260px}
+  .gauge-legend{margin-top:18px;font-size:13px}
   /* bottom tab bar */
   .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line2);
     justify-content:space-around;align-items:center;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:30}
@@ -136,8 +142,10 @@ a{color:inherit;text-decoration:none}
 @media(max-width:430px){
   .topbar h1{font-size:19px}
   .card-title{font-size:16px}
-  .donut-row{gap:12px}
-  .donut-legend{font-size:13px}
+  .donut-row{gap:10px}
+  .donut-legend{font-size:clamp(11.5px,3.3vw,13px);white-space:normal}
+  .donut-legend .lg{gap:8px}
+  .gauge-legend{gap:6px 14px;font-size:12px}
 }
 </style>
 </head>
@@ -185,7 +193,6 @@ a{color:inherit;text-decoration:none}
     </header>
  
     <section class="content">
-      <div class="col-left">
       <!-- Patrimoine Brut -->
       <div class="card c-patrimoine">
         <div class="card-head">
@@ -195,22 +202,7 @@ a{color:inherit;text-decoration:none}
         <div class="chart-box" id="chartPatrimoine"></div>
       </div>
  
-      <!-- Revenus & Dépenses -->
-      <div class="card c-revenus">
-        <div class="card-head">
-          <span class="card-title">Revenus &amp; Dépenses</span>
-          <div style="display:flex;align-items:center;gap:16px">
-            <div class="legend-inline">
-              <span class="lg"><span class="dot" style="background:var(--bright)"></span>Revenus</span>
-              <span class="lg"><span class="dot" style="background:var(--blue)"></span>Dépenses</span>
-            </div>
-            <div class="dd" id="ddRevenus"><button class="pill dd-toggle" type="button"><span class="dd-label">Mois</span> <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
-          </div>
-        </div>
-        <div class="chart-box" id="chartRevenus"></div>
-      </div>
-      </div>
-      <div class="col-right">
+      <div class="rt-wrap">
       <!-- Répartition des actifs -->
       <div class="card c-repartition">
         <div class="card-head"><span class="card-title">Répartition des actifs</span></div>
@@ -233,12 +225,27 @@ a{color:inherit;text-decoration:none}
           <div class="lg"><span class="dot" style="background:var(--blue)"></span>Restant (92%)</div>
         </div>
       </div>
+      </div>
+ 
+      <!-- Revenus & Dépenses -->
+      <div class="card c-revenus">
+        <div class="card-head">
+          <span class="card-title">Revenus &amp; Dépenses</span>
+          <div style="display:flex;align-items:center;gap:16px">
+            <div class="legend-inline">
+              <span class="lg"><span class="dot" style="background:var(--bright)"></span>Revenus</span>
+              <span class="lg"><span class="dot" style="background:var(--blue)"></span>Dépenses</span>
+            </div>
+            <div class="dd" id="ddRevenus"><button class="pill dd-toggle" type="button"><span class="dd-label">Mois</span> <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
+          </div>
+        </div>
+        <div class="chart-box" id="chartRevenus"></div>
+      </div>
  
       <!-- Transactions récentes -->
       <div class="card c-transactions">
         <div class="card-head"><span class="card-title">Transactions récentes</span></div>
         <div id="txnList"></div>
-      </div>
       </div>
     </section>
   </div>
@@ -264,7 +271,8 @@ const kFmt = v=> v===0 ? '0' : (Number.isInteger(v)? v+'K' : String(v).replace('
 function areaChart(target,cfg){
   target.innerHTML='';
   const {labels,data,yMax,yStep,yfmt}=cfg;
-  const W=760,H=300,L=46,R=14,T=18,B=30, pw=W-L-R, ph=H-T-B, n=data.length;
+  const W=Math.max(120,Math.round(target.clientWidth)), H=Math.max(120,Math.round(target.clientHeight));
+  const L=46,R=14,T=18,B=30, pw=W-L-R, ph=H-T-B, n=data.length;
   const x=i=> n===1 ? L+pw/2 : L+pw*(i/(n-1));
   const y=v=>T+ph*(1-v/yMax);
   const pts=data.map((v,i)=>[x(i),y(v)]);
@@ -280,11 +288,12 @@ function areaChart(target,cfg){
     ylab+=`<text x="${L-10}" y="${y(v)+4}" text-anchor="end" fill="${AXIS}" font-size="12">${yfmt(v)}</text>`;
   }
   let vgrid='',xlab='';
+  const lstep=Math.max(1,Math.ceil(n/Math.max(1,Math.floor(pw/42))));
   labels.forEach((lb,i)=>{
     vgrid+=`<line x1="${x(i)}" y1="${T}" x2="${x(i)}" y2="${T+ph}" stroke="${GRID}" opacity=".6"/>`;
-    if(lb)xlab+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${lb}</text>`;
+    if(lb && i%lstep===0)xlab+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${lb}</text>`;
   });
-  target.appendChild(el(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+  target.appendChild(el(`<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <defs><linearGradient id="agrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${BLUE}" stop-opacity=".18"/><stop offset="1" stop-color="${BLUE}" stop-opacity="0"/></linearGradient></defs>
     ${grid}${vgrid}<path d="${area}" fill="url(#agrad)"/><path d="${d}" fill="none" stroke="${BLUE}" stroke-width="2.5" stroke-linejoin="round"/>${ylab}${xlab}
   </svg>`));
@@ -294,7 +303,8 @@ function areaChart(target,cfg){
 function barChart(target,cfg){
   target.innerHTML='';
   const {labels,rev,dep,yMax,yStep,yfmt}=cfg;
-  const W=760,H=320,L=44,R=12,T=18,B=30, pw=W-L-R, ph=H-T-B, n=rev.length;
+  const W=Math.max(120,Math.round(target.clientWidth)), H=Math.max(120,Math.round(target.clientHeight));
+  const L=44,R=12,T=18,B=30, pw=W-L-R, ph=H-T-B, n=rev.length;
   const y=v=>T+ph*(1-v/yMax);
   const slot=pw/n, gap=Math.max(2,slot*0.07), grpW=slot*0.5, bw=(grpW-gap)/2;
   let grid='',ylab='',xlab='',bars='';
@@ -304,12 +314,13 @@ function barChart(target,cfg){
   }
   function bar(cx,v,color){const top=y(v),h=T+ph-top,r=Math.min(bw/2,h);
     return `<path d="M${cx},${top+r} a${r},${r} 0 0 1 ${bw},0 L${cx+bw},${T+ph} L${cx},${T+ph} Z" fill="${color}"/>`;}
+  const lstep=Math.max(1,Math.ceil(n/Math.max(1,Math.floor(pw/42))));
   rev.forEach((rv,i)=>{
     const c=L+slot*i+slot/2, x0=c-grpW/2;
     bars+=bar(x0,rv,BRIGHT)+bar(x0+bw+gap,dep[i],BLUE);
-    xlab+=`<text x="${c}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${labels[i]}</text>`;
+    if(i%lstep===0)xlab+=`<text x="${c}" y="${H-8}" text-anchor="middle" fill="${AXIS}" font-size="12">${labels[i]}</text>`;
   });
-  target.appendChild(el(`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">${grid}${bars}${ylab}${xlab}</svg>`));
+  target.appendChild(el(`<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">${grid}${bars}${ylab}${xlab}</svg>`));
 }
  
 /* ---- Datasets per period ---- */
@@ -331,8 +342,14 @@ const REV={
  
 const patrTarget=document.getElementById('chartPatrimoine');
 const revTarget=document.getElementById('chartRevenus');
-areaChart(patrTarget,PATR.mois);
-barChart(revTarget,REV.mois);
+let patrCfg=PATR.mois, revCfg=REV.mois;
+function renderPatr(){areaChart(patrTarget,patrCfg);}
+function renderRev(){barChart(revTarget,revCfg);}
+renderPatr(); renderRev();
+if(window.ResizeObserver){
+  let raf; const reflow=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{renderPatr();renderRev();});};
+  const ro=new ResizeObserver(reflow); ro.observe(patrTarget); ro.observe(revTarget);
+}
  
 /* ---- Dropdown component ---- */
 function makeDropdown(id,onChange){
@@ -353,8 +370,8 @@ function makeDropdown(id,onChange){
   }));
 }
 document.addEventListener('click',()=>document.querySelectorAll('.dd.open').forEach(o=>o.classList.remove('open')));
-makeDropdown('ddPatrimoine',p=>areaChart(patrTarget,PATR[p]));
-makeDropdown('ddRevenus',p=>barChart(revTarget,REV[p]));
+makeDropdown('ddPatrimoine',p=>{patrCfg=PATR[p];renderPatr();});
+makeDropdown('ddRevenus',p=>{revCfg=REV[p];renderRev();});
  
 /* ---- Donut ---- */
 (function(){
