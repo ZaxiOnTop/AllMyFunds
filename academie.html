@@ -219,8 +219,6 @@ a{color:inherit;text-decoration:none}
 
 /* ===== Cours verrouillés (abonnés) ===== */
 .cours .cover{position:relative}
-.lock-badge{position:absolute;top:8px;right:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.95);color:var(--blue);font-size:clamp(9.5px,0.8vw,11px);font-weight:700;border-radius:999px;padding:4px 9px}
-.lock-badge svg{flex:0 0 auto}
 .cours.locked .cover{filter:saturate(.55) brightness(.96)}
 .cours.locked h3,.cours.locked .desc{opacity:.75}
 .unlock{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:9px;font-size:clamp(10.5px,0.88vw,12.5px);font-weight:600;color:#fff;background:var(--blue);border-radius:9px;padding:clamp(7px,0.9vh,9px) 10px;text-align:center}
@@ -228,7 +226,6 @@ a{color:inherit;text-decoration:none}
 .cours.locked:hover{box-shadow:0 16px 32px -20px rgba(0,40,120,.4);transform:translateY(-2px)}
 @media(max-width:1000px){
   .unlock{font-size:12.5px;padding:9px 10px}
-  .lock-badge{font-size:10.5px}
 }
 </style>
 </head>
@@ -363,7 +360,7 @@ function isLocked(c){return c.lvl!=='Débutant';} /* Intermédiaire & Avancé = 
 function cardHTML(c){
   const locked=isLocked(c);
   return `<article class="cours${locked?' locked':''}">
-    <div class="cover" style="background:${GRAD[c.g]}">${ICO[c.ic]}${locked?`<span class="lock-badge">${LOCK_SVG}Premium</span>`:''}</div>
+    <div class="cover" style="background:${GRAD[c.g]}">${ICO[c.ic]}</div>
     <div class="body">
       <span class="tag">${c.th}</span>
       <h3>${c.ti}</h3>
