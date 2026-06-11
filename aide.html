@@ -44,10 +44,6 @@ a{color:inherit;text-decoration:none}
 .main{display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden}
 .topbar{display:flex;align-items:center;gap:20px;padding:18px 32px;background:#fff;border-bottom:1px solid var(--line);flex:0 0 auto}
 .topbar h1{font-size:clamp(19px,1.7vw,24px);font-weight:700;letter-spacing:-.3px;flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.search{margin-left:auto;position:relative;width:clamp(170px,22vw,300px)}
-.search input{width:100%;height:44px;border:1px solid var(--line2);border-radius:11px;background:#fff;padding:0 42px 0 16px;font-family:inherit;font-size:14px}
-.search input:focus{outline:none;border-color:var(--blue)}
-.search svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);opacity:.45}
 .icon-btn{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
 .avatar{width:44px;height:44px;border-radius:50%;flex:0 0 auto;background:linear-gradient(135deg,#f0c9a8,#e8b48a);display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 1px var(--line2)}
 .avatar svg{width:30px;height:30px}
@@ -138,8 +134,7 @@ a{color:inherit;text-decoration:none}
   .sidebar{display:none}
   .topbar{padding:18px 18px;position:sticky;top:0;z-index:20}
   .topbar h1{font-size:21px}
-  .search{display:none}
-  .topbar>.icon-btn{margin-left:auto}
+    .topbar>.icon-btn{margin-left:auto}
   .content{display:flex;flex-direction:column;padding:6px 16px 96px;gap:10px;flex:none}
   .rt-wrap{display:contents}
   .c-patrimoine,.c-revenus,.c-transactions,.rt-wrap .card{flex:none}
@@ -219,6 +214,35 @@ a{color:inherit;text-decoration:none}
 a.res-row:hover{color:var(--blue)}
 .dot-ok{width:9px;height:9px;border-radius:50%;background:#1d8a4e;flex:0 0 auto}
 .empty{padding:26px;text-align:center;color:var(--gray);font-size:13.5px}
+
+/* ===== Topbar popovers ===== */
+.topbar{position:relative}
+.topbar .icon-btn{margin-left:auto;position:relative}
+.bdg{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:#e74c3c;border:2px solid #fff}
+.avatar{cursor:pointer}
+.pop{position:absolute;top:calc(100% - 8px);right:clamp(14px,2.2vw,32px);background:#fff;border:1px solid var(--line2);border-radius:14px;
+  box-shadow:0 20px 44px -18px rgba(0,30,90,.35);width:min(320px,calc(100vw - 28px));z-index:80;display:none;overflow:hidden}
+.pop.open{display:block}
+#popUser{width:min(250px,calc(100vw - 28px))}
+.pop-head{padding:12px 16px;font-weight:700;font-size:clamp(12.5px,1vw,13.5px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pop-head button{background:none;border:none;color:var(--blue);font-family:inherit;font-size:clamp(10.5px,0.85vw,12px);font-weight:600;cursor:pointer;white-space:nowrap}
+.ntf{display:flex;gap:10px;padding:11px 16px;align-items:flex-start}
+.ntf+.ntf{border-top:1px solid var(--line)}
+.ntf .nd{width:8px;height:8px;border-radius:50%;background:var(--bright);margin-top:5px;flex:0 0 auto}
+.ntf.read .nd{background:#dfe5ee}
+.ntf b{display:block;font-size:clamp(11.5px,0.95vw,12.5px)}
+.ntf span{color:var(--gray);font-size:clamp(10.5px,0.85vw,11.5px);line-height:1.4}
+.um-id{padding:12px 16px;border-bottom:1px solid var(--line)}
+.um-id b{display:block;font-size:clamp(12px,1vw,13.5px)}
+.um-id span{color:var(--gray);font-size:clamp(10.5px,0.85vw,12px)}
+.um{display:flex;flex-direction:column;padding:6px}
+.um a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;font-size:clamp(12px,0.95vw,13px);font-weight:500;color:#3c4655}
+.um a:hover{background:#f3f7fc}
+.um a.out{color:#c0392b}
+.um a.out:hover{background:#fdf0f0}
+
+.um a.active{color:var(--blue);background:#eaf2ff;font-weight:600}
+.avatar.cur{box-shadow:0 0 0 2px var(--blue)}
 </style>
 </head>
 <body>
@@ -236,14 +260,7 @@ a.res-row:hover{color:var(--blue)}
       <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.3L3 18l3 3 6.4-6.3a4 4 0 0 0 5.3-5.4l-2.6 2.6-2.1-2.1z"/></svg></span>Outils d'Optimisation<span class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span></a>
       <a href="academie.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5z"/><path d="M8 3v17"/></svg></span>Académie</a>
     </nav>
-    <div class="side-sec">Général</div>
-    <nav class="nav">
-      <a href="profil.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>Profil &amp; Sécurité</a>
-      <a href="abonnement.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg></span>Abonnement &amp; Parrainage</a>
-      <a class="active" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4 1c0 2-2.6 2.5-2.6 2.5"/><path d="M12 17h.01"/></svg></span>Aide &amp; Support</a>
-      <a href="legal.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 18l4.5 3L15 14"/></svg></span>Légal</a>
-      <a href="index.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l5-5-5-5M15 12H3"/></svg></span>Déconnexion</a>
-    </nav>
+    
     <div class="upgrade">
       <div class="up-head">
         <div class="rk"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#004AAD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91 0z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
@@ -258,12 +275,25 @@ a.res-row:hover{color:var(--blue)}
   <div class="main">
     <header class="topbar">
       <h1>Aide &amp; Support</h1>
-      <div class="search">
-        <input type="text" placeholder="Rechercher">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#5a6473" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <button class="icon-btn" id="btnNotif" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3c4655" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="bdg" id="ntfBadge"></span></button>
+      <div class="avatar cur" id="btnUser" role="button" tabindex="0"><svg viewBox="0 0 24 24" fill="#7a5230"><circle cx="12" cy="8.5" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></svg></div>
+
+      <div class="pop" id="popNotif">
+        <div class="pop-head">Notifications <button type="button" id="markRead">Tout marquer lu</button></div>
+        <div class="ntf"><span class="nd"></span><div><b>Virement entrant reçu</b><span>+305,00 € — Vente Vinted · il y a 2 h</span></div></div>
+        <div class="ntf"><span class="nd"></span><div><b>Budget « Courses » à 85 %</b><span>Il vous reste 45 € pour ce mois · hier</span></div></div>
+        <div class="ntf read"><span class="nd"></span><div><b>Nouveau cours disponible</b><span>« Psychologie de l’argent » dans l’Académie · il y a 3 j</span></div></div>
       </div>
-      <button class="icon-btn" aria-label="Notifications"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3c4655" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
-      <div class="avatar"><svg viewBox="0 0 24 24" fill="#7a5230"><circle cx="12" cy="8.5" r="4"/><path d="M4 21a8 8 0 0 1 16 0z"/></svg></div>
+      <div class="pop" id="popUser">
+        <div class="um-id"><b>Thomas Martin</b><span>thomas.martin@email.fr</span></div>
+        <nav class="um">
+          <a href="profil.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil &amp; Sécurité</a>
+          <a href="abonnement.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>Abonnement &amp; Parrainage</a>
+          <a class="active" href="aide.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4 1c0 2-2.6 2.5-2.6 2.5"/><path d="M12 17h.01"/></svg>Aide &amp; Support</a>
+          <a href="legal.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 14l-1.5 7L12 18l4.5 3L15 14"/></svg>Légal</a>
+          <a class="out" href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>Déconnexion</a>
+        </nav>
+      </div>
     </header>
 
     <section class="content page hp">
@@ -334,6 +364,23 @@ document.getElementById('fSupport').addEventListener('submit',e=>{
   const f=e.target, s=f.querySelector('.saved');
   s.classList.add('show'); setTimeout(()=>s.classList.remove('show'),3000); f.reset();
 });
+</script>
+<script>
+(function(){
+  const bell=document.getElementById('btnNotif'), user=document.getElementById('btnUser');
+  const pn=document.getElementById('popNotif'), pu=document.getElementById('popUser');
+  if(!bell||!user||!pn||!pu)return;
+  function closeAll(){pn.classList.remove('open');pu.classList.remove('open');}
+  bell.addEventListener('click',e=>{e.stopPropagation();const o=pn.classList.contains('open');closeAll();if(!o)pn.classList.add('open');});
+  user.addEventListener('click',e=>{e.stopPropagation();const o=pu.classList.contains('open');closeAll();if(!o)pu.classList.add('open');});
+  user.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();user.click();}});
+  pn.addEventListener('click',e=>e.stopPropagation());
+  pu.addEventListener('click',e=>e.stopPropagation());
+  document.addEventListener('click',closeAll);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeAll();});
+  const mk=document.getElementById('markRead');
+  mk.addEventListener('click',()=>{document.querySelectorAll('.ntf').forEach(n=>n.classList.add('read'));const b=document.getElementById('ntfBadge');if(b)b.remove();});
+})();
 </script>
 </body>
 </html>
