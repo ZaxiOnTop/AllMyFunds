@@ -178,6 +178,7 @@ a{color:inherit;text-decoration:none}
 
 /* ===== Pages Général ===== */
 .content.page{display:flex;flex-direction:column;gap:clamp(10px,1.3vh,16px);overflow-y:auto;align-items:stretch}
+.content.page>*{flex:0 0 auto}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.2vw,16px);align-items:start}
 .col-stack{display:flex;flex-direction:column;gap:clamp(10px,1.2vw,16px);min-width:0}
 .frm{display:flex;flex-direction:column;gap:clamp(10px,1.2vh,14px)}
@@ -313,7 +314,7 @@ a{color:inherit;text-decoration:none}
             </div>
           </div>
           <div class="card danger">
-            <div class="card-head"><span class="card-title">Zone de danger</span></div>
+            <div class="card-head"><span class="card-title">Suppression de compte</span></div>
             <p class="muted">La suppression de votre compte est définitive : vos données, comptes liés et historiques seront effacés.</p>
             <button class="btn-danger" id="btnDel" type="button">Supprimer mon compte</button>
             <p class="saved del" id="delMsg">Demande enregistrée — un e-mail de confirmation vous a été envoyé.</p>
