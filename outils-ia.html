@@ -173,6 +173,7 @@ a{color:inherit;text-decoration:none}
 
 /* ===== Topbar popovers ===== */
 .topbar{position:relative}
+@media(max-width:1000px){.topbar{position:sticky;top:0;z-index:20}}
 .topbar .icon-btn{margin-left:auto;position:relative}
 .bdg{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:#e74c3c;border:2px solid #fff}
 .avatar{cursor:pointer}
@@ -370,10 +371,17 @@ a{color:inherit;text-decoration:none}
 .seg-bar i.f{background:linear-gradient(90deg,#0BA5FF,#004AAD)}
 .alert{display:flex;gap:11px;padding:clamp(9px,1.1vh,12px) 0;align-items:flex-start}
 .alert+.alert{border-top:1px solid var(--line)}
-.al-ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.al-ic,.alert .al-ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:0}
+.al-ic svg{width:15px;height:15px;flex:0 0 auto}
 .al-ic.warn{background:#fdf3df;color:#b07b16}.al-ic.bad{background:#fdeaea;color:#c0392b}.al-ic.info{background:#e7f0ff;color:var(--blue)}
 .alert b{display:block;font-size:clamp(11.5px,0.95vw,13px)}
 .alert span{display:block;font-size:clamp(10px,0.82vw,11.5px);color:var(--gray);line-height:1.45}
+/* sous-scores santé financière */
+.vrow{display:flex;align-items:center;gap:12px;padding:clamp(9px,1.1vh,12px) 0}
+.vrow+.vrow{border-top:1px solid var(--line)}
+.vrow .v-l{flex:0 0 clamp(118px,11vw,150px);font-size:clamp(11.5px,0.95vw,13px);font-weight:500;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#3c4655}
+.vrow .cf-bar{flex:1}
+.vrow .v-v{flex:0 0 auto;font-weight:700;font-size:clamp(11.5px,0.95vw,13px);white-space:nowrap;min-width:28px;text-align:right}
 /* --- rapports fiscaux --- */
 .tax-row{display:flex;align-items:center;gap:12px;padding:clamp(10px,1.2vh,13px) clamp(8px,1vw,12px)}
 .tax-row+.tax-row{border-top:1px solid var(--line)}
@@ -404,11 +412,27 @@ a{color:inherit;text-decoration:none}
 .det-chart{position:relative;width:100%;height:clamp(190px,26vh,270px)}
 .det-chart svg{display:block;width:100%;height:100%}
 .legend-inline{flex-wrap:wrap}
+@media(min-width:1001px){
+  .content.pat>.ia-grid{flex:1 1 auto;min-height:480px}
+  .ia-grid{align-items:stretch}
+  .c-chat{min-height:0;max-height:none}
+  .c-chat .chat{flex:1 1 auto;max-height:none;min-height:180px}
+  .ia-side{min-height:0;overflow-y:auto;scrollbar-width:thin}
+}
 @media(max-width:1000px){
   .kpis.k4{grid-template-columns:1fr 1fr}
+  .kpis.k4 .kpi:last-child{grid-column:auto}
   .ia-grid{grid-template-columns:1fr}
   .two-col{grid-template-columns:1fr}
-  .chat{max-height:52vh}
+  .chat{min-height:240px;max-height:56vh}
+  .bub{max-width:95%}
+  .bub .mini{grid-template-columns:minmax(0,1.3fr) auto auto;gap:4px 8px}
+  .chat-in input{font-size:16px}
+  .chips button{font-size:12px}
+  .vrow .v-l{flex-basis:124px;font-size:12.5px}
+  .vrow .v-v{font-size:12.5px}
+  .alert b{font-size:13px}
+  .alert span{font-size:11.5px}
   .fee-alt{margin-left:0}
   .gain-banner .gb-val{margin-left:0;text-align:left;width:100%}
 }
