@@ -75,6 +75,12 @@ a{color:inherit;text-decoration:none}
 .legend-inline{display:flex;align-items:center;gap:clamp(10px,1.3vw,18px);font-size:clamp(11.5px,0.95vw,13px);color:#48505e}
 .legend-inline .lg{display:flex;align-items:center;gap:7px}
 .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.cf-row{display:flex;align-items:center;gap:11px;padding:clamp(9px,1.1vh,12px) 0}
+.cf-row+.cf-row{border-top:1px solid var(--line)}
+.cf-tx{flex:1;min-width:0}
+.cf-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:7px}
+.cf-nm{font-size:clamp(12px,0.95vw,13.5px);font-weight:500;color:#3c4655;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cf-top b{font-size:clamp(12.5px,1vw,14px);white-space:nowrap;flex:0 0 auto}
 
 /* card order on mobile set via .content reflow */
 
@@ -173,6 +179,7 @@ a{color:inherit;text-decoration:none}
 
 /* ===== Topbar popovers ===== */
 .topbar{position:relative}
+@media(max-width:1000px){.topbar{position:sticky;top:0;z-index:20}}
 .topbar .icon-btn{margin-left:auto;position:relative}
 .bdg{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:#e74c3c;border:2px solid #fff}
 .avatar{cursor:pointer}
@@ -370,7 +377,8 @@ a{color:inherit;text-decoration:none}
 .seg-bar i.f{background:linear-gradient(90deg,#0BA5FF,#004AAD)}
 .alert{display:flex;gap:11px;padding:clamp(9px,1.1vh,12px) 0;align-items:flex-start}
 .alert+.alert{border-top:1px solid var(--line)}
-.al-ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.al-ic,.alert .al-ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:0}
+.al-ic svg{width:15px;height:15px;flex:0 0 auto}
 .al-ic.warn{background:#fdf3df;color:#b07b16}.al-ic.bad{background:#fdeaea;color:#c0392b}.al-ic.info{background:#e7f0ff;color:var(--blue)}
 .alert b{display:block;font-size:clamp(11.5px,0.95vw,13px)}
 .alert span{display:block;font-size:clamp(10px,0.82vw,11.5px);color:var(--gray);line-height:1.45}
@@ -406,11 +414,21 @@ a{color:inherit;text-decoration:none}
 .legend-inline{flex-wrap:wrap}
 @media(max-width:1000px){
   .kpis.k4{grid-template-columns:1fr 1fr}
+  .kpis.k4 .kpi:last-child{grid-column:auto}
   .ia-grid{grid-template-columns:1fr}
   .two-col{grid-template-columns:1fr}
   .chat{max-height:52vh}
   .fee-alt{margin-left:0}
   .gain-banner .gb-val{margin-left:0;text-align:left;width:100%}
+  .cf-nm{font-size:13px}
+  .cf-top b{font-size:13.5px}
+  .ech-tx b{font-size:13px}
+  .ech-tx span{font-size:11.5px}
+@media(max-width:560px){
+  .fee-top{flex-wrap:wrap;row-gap:8px}
+  .fee-top::after{content:"";order:4;flex-basis:100%;height:0}
+  .fee-bdg{order:5;margin-left:46px}
+  .fee-val{margin-left:auto}
 }
 </style>
 </head>
@@ -471,11 +489,6 @@ a{color:inherit;text-decoration:none}
         <div class="card kpi"><div class="k-lab">Frais après optimisation</div><div class="k-val" id="kOpt">—</div><div class="k-delta up" id="kOptD"></div></div>
         <div class="card kpi"><div class="k-lab">Économie annuelle</div><div class="k-val" style="color:#1d8a4e" id="kEco">—</div><div class="k-delta up">dès la 1ʳᵉ année</div></div>
         <div class="card kpi"><div class="k-lab">Gain projeté sur 20 ans</div><div class="k-val" style="color:#1d8a4e" id="kGain">—</div><div class="k-delta up">économies réinvesties</div></div>
-      </div>
-      <div class="gain-banner">
-        <div class="gb-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7H9.5a2.5 2.5 0 0 0 0 5h5a2.5 2.5 0 0 1 0 5H7"/></svg></div>
-        <div class="gb-tx"><b>Votre bénéfice consommateur</b><span>En basculant vers les offres partenaires recommandées, vous gardez chaque année cet argent dans votre poche au lieu de le verser en frais.</span></div>
-        <div class="gb-val"><b id="bEco">—</b><span>économisés par an</span></div>
       </div>
       <div class="pat-grid">
         <div class="card c-evo">
@@ -544,7 +557,6 @@ document.getElementById("kCurD").textContent=dec(cur/ttl*100,2)+" % du patrimoin
 document.getElementById("kOpt").textContent=eur(opt);
 document.getElementById("kOptD").textContent=dec(opt/ttl*100,2)+" % du patrimoine";
 document.getElementById("kEco").textContent="+"+eur(eco);
-document.getElementById("bEco").textContent=eur(eco);
 document.getElementById("nbOpt").textContent=nOpt+" enveloppes optimisables sur "+PROD.length;
 /* projection 20 ans : rendement brut 5 %, versements 650 \u20ac/mois */
 const R=0.05, M=650;
@@ -567,7 +579,8 @@ function draw(){
   for(let i=0;i<=4;i++){const v=yMax*i/4;
     grid+='<line x1="'+L+'" y1="'+y(v)+'" x2="'+(W-Rg)+'" y2="'+y(v)+'" stroke="#eef1f6"/>';
     ylab+='<text x="'+(L-9)+'" y="'+(y(v)+4)+'" text-anchor="end" fill="#9aa3b2" font-size="11">'+(v>=1e6?dec(v/1e6,1)+"M":Math.round(v/1e3)+"K")+'</text>';}
-  for(let i=0;i<=20;i+=5)xlab+='<text x="'+x(i)+'" y="'+(H-7)+'" text-anchor="middle" fill="#9aa3b2" font-size="11">'+(i===0?"Auj.":"+"+i+" ans")+'</text>';
+  for(let i=0;i<=20;i+=5){const anch=i===0?"start":i===20?"end":"middle",lx=i===0?Math.max(2,x(0)-14):i===20?W-2:x(i);
+    xlab+='<text x="'+lx+'" y="'+(H-7)+'" text-anchor="'+anch+'" fill="#9aa3b2" font-size="11">'+(i===0?"Auj.":"+"+i+" ans")+'</text>';}
   tgt.appendChild(el('<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'+grid
    +'<path d="'+pth(B)+' L'+x(20)+','+(T+ph)+' L'+x(0)+','+(T+ph)+' Z" fill="#1d8a4e" opacity=".07"/>'
    +'<path d="'+pth(A)+'" fill="none" stroke="#c0392b" stroke-width="2.3" stroke-dasharray="5 4"/>'
