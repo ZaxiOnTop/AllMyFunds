@@ -173,6 +173,7 @@ a{color:inherit;text-decoration:none}
 
 /* ===== Topbar popovers ===== */
 .topbar{position:relative}
+@media(max-width:1000px){.topbar{position:sticky;top:0;z-index:20}}
 .topbar .icon-btn{margin-left:auto;position:relative}
 .bdg{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:#e74c3c;border:2px solid #fff}
 .avatar{cursor:pointer}
@@ -230,8 +231,10 @@ a{color:inherit;text-decoration:none}
 .sheet-list a svg{color:#9aa3b2;flex:0 0 auto}
 
 /* ===== Pages Patrimoine ===== */
-.content.pat{display:flex;flex-direction:column;gap:clamp(10px,1.3vh,16px);overflow-y:auto;align-items:stretch}
+.content.pat{display:flex;flex-direction:column;gap:clamp(10px,1.3vh,16px);overflow-y:auto;align-items:stretch;padding-top:0;scroll-padding-top:0}
 .content.pat>*{flex:0 0 auto}
+/* the sticky header must cover the full top strip including side padding + flex gap */
+.content.pat>.det-head{margin-bottom:calc(-1*clamp(10px,1.3vh,16px))}
 .pat-tabs{display:flex;gap:clamp(6px,0.8vw,10px);flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;
   scrollbar-width:thin;scrollbar-color:#c9d4e6 transparent;-webkit-overflow-scrolling:touch}
 .pat-tabs::-webkit-scrollbar{height:6px}
@@ -390,7 +393,8 @@ input[type=range]{width:100%;accent-color:var(--blue);height:22px;cursor:pointer
 .det-nm h2{font-size:clamp(15px,1.4vw,19px);font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .det-px{margin-left:auto;text-align:right;flex:0 0 auto}
 .det-px b{display:block;font-size:clamp(16px,1.5vw,21px);letter-spacing:-.3px;white-space:nowrap}
-.anc{display:flex;gap:clamp(6px,0.8vw,9px);flex-wrap:nowrap;overflow-x:auto;padding:6px 0;scrollbar-width:thin;scrollbar-color:#c9d4e6 transparent;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:5;background:var(--bg)}
+.det-head{position:sticky;top:0;z-index:6;background:var(--bg);display:flex;flex-direction:column;gap:4px;padding:10px 0 6px}
+.anc{display:flex;gap:clamp(6px,0.8vw,9px);flex-wrap:nowrap;overflow-x:auto;padding:6px 0;scrollbar-width:thin;scrollbar-color:#c9d4e6 transparent;-webkit-overflow-scrolling:touch}
 .anc::-webkit-scrollbar{height:6px}.anc::-webkit-scrollbar-thumb{background:#c9d4e6;border-radius:99px}
 .anc button{border:1px solid var(--line2);background:#fff;color:#48505e;border-radius:999px;padding:clamp(6px,0.7vh,8px) clamp(10px,1.2vw,14px);font-family:inherit;font-size:clamp(11px,0.9vw,12.5px);font-weight:500;white-space:nowrap;cursor:pointer;flex:0 0 auto}
 .anc button.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
@@ -422,9 +426,21 @@ input[type=range]{width:100%;accent-color:var(--blue);height:22px;cursor:pointer
 .nws span{font-size:clamp(10.5px,0.85vw,12px);color:var(--gray)}
 @media(max-width:1000px){
   .stat-grid{grid-template-columns:1fr 1fr}
-  .anc{top:74px}
+  .det-head{top:80px}
+  .det-top{gap:8px;flex-wrap:nowrap}
+  .back-btn{padding:7px 10px}
+  .det-id{gap:9px}
+  .det-id .tkr{width:36px;height:36px;font-size:9px;border-radius:11px}
+  .det-nm h2{font-size:14.5px}
+  .det-nm .a-sub{font-size:10.5px}
+  .det-px b{font-size:15px}
+  .det-px .pbadge{font-size:9.5px}
   .vrow .v-l{flex-basis:104px}
   .vrow .v-m{display:none}
+}
+@media(max-width:430px){
+  .back-btn span{display:none}
+  .det-nm .a-sub .tbadge{display:none}
 }
 </style>
 </head>
@@ -631,6 +647,7 @@ const charts=[];
 function lineChart(target,labels,data,col){
   function draw(){
     if(!target.isConnected)return;
+    if(!target.clientWidth||!target.clientHeight){requestAnimationFrame(draw);return;}
     target.innerHTML="";
     const W=Math.max(200,Math.round(target.clientWidth)),H=Math.max(140,Math.round(target.clientHeight));
     const L=54,R=12,T=12,B=26,pw=W-L-R,ph=H-T-B,n=data.length;
@@ -642,16 +659,19 @@ function lineChart(target,labels,data,col){
       grid+='<line x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'" stroke="'+GRIDC+'"/>';
       ylab+='<text x="'+(L-9)+'" y="'+(y(v)+4)+'" text-anchor="end" fill="'+AXIS+'" font-size="11">'+kfmt(v)+'</text>';}
     let xlab="";const st=Math.max(1,Math.ceil(n/Math.max(2,Math.floor(pw/56))));
-    for(let i=0;i<n;i+=st)xlab+='<text x="'+x(i)+'" y="'+(H-7)+'" text-anchor="middle" fill="'+AXIS+'" font-size="11">'+labels[i]+'</text>';
+    for(let i=0;i<n;i+=st){if(!labels[i])continue;
+      const tx=x(i),anch=tx>W-34?"end":tx<L+6?"start":"middle",lx=anch==="end"?W-2:anch==="start"?Math.max(2,tx-12):tx;
+      xlab+='<text x="'+lx+'" y="'+(H-7)+'" text-anchor="'+anch+'" fill="'+AXIS+'" font-size="11">'+labels[i]+'</text>';}
     target.appendChild(el('<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'
       +grid+'<path d="'+p+' L'+x(n-1)+','+(T+ph)+' L'+x(0)+','+(T+ph)+' Z" fill="'+col+'" opacity=".12"/>'
       +'<path d="'+p+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round"/>'+ylab+xlab+'</svg>'));
   }
-  draw();charts.push({t:target,draw});
+  draw();regChart(target,draw);
 }
 function vbars(target,labels,series,unit){
   function draw(){
     if(!target.isConnected)return;
+    if(!target.clientWidth||!target.clientHeight){requestAnimationFrame(draw);return;}
     target.innerHTML="";
     const W=Math.max(200,Math.round(target.clientWidth)),H=Math.max(140,Math.round(target.clientHeight));
     const L=46,R=10,T=12,B=26,pw=W-L-R,ph=H-T-B,n=labels.length;
@@ -673,9 +693,11 @@ function vbars(target,labels,series,unit){
     }
     target.appendChild(el('<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">'+grid+b+ylab+xlab+'</svg>'));
   }
-  draw();charts.push({t:target,draw});
+  draw();regChart(target,draw);
 }
-if(window.ResizeObserver){let raf;new ResizeObserver(()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>charts.forEach(c=>c.t.isConnected&&c.draw()));}).observe(document.body);}
+let chartRO=null;
+if(window.ResizeObserver){let raf;chartRO=new ResizeObserver(()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>charts.forEach(c=>c.t.isConnected&&c.draw()));});chartRO.observe(document.body);}
+function regChart(t,draw){charts.push({t,draw});if(chartRO)chartRO.observe(t);}
 
 /* ---------- fiche actif ---------- */
 const vList=document.getElementById("viewList"),vDet=document.getElementById("viewDetail");
@@ -701,10 +723,10 @@ function renderDetail(a){
   for(let i=0;i<24;i++){months.push(mN[i]||"");serie.push(v);v*=1+( (px/v-1)/(24-i) )+(r()-0.5)*(isC?0.09:0.035);}
   serie.push(px);months.push("Juin 26");
   /* sections */
-  let h='<div class="det-top"><button class="back-btn" id="btnBack" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Retour</button>'
+  let h='<div class="det-head"><div class="det-top"><button class="back-btn" id="btnBack" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg><span>Retour</span></button>'
    +'<div class="det-id"><span class="tkr" style="background:'+a[8]+'">'+a[1]+'</span><div class="det-nm"><h2>'+a[0]+'</h2><span class="a-sub">'+a[1]+' <span class="tbadge '+a[2]+'">'+TLAB[a[2]]+'</span> \u00b7 '+a[3]+'</span></div></div>'
    +'<div class="det-px"><b>'+a[4]+'</b>'+pb(a[5])+'</div></div>';
-  h+='<div class="anc" id="anc">'+SECS.map((s,i)=>'<button type="button"'+(i===0?' class="on"':'')+' data-s="'+s[0]+'">'+s[1]+'</button>').join("")+'</div>';
+  h+='<div class="anc" id="anc">'+SECS.map((s,i)=>'<button type="button"'+(i===0?' class="on"':'')+' data-s="'+s[0]+'">'+s[1]+'</button>').join("")+'</div></div>';
   /* stats */
   let st;
   if(isA)st=[["Capitalisation",dec(cap,0)+" Mds "+sym],["PER",dec(per)],["Rendement",a[6]!=null?dec(a[6])+" %":"\u2014"],["B\u00eata",dec(beta,2)],["+Haut 52 sem.",dec(hi52,hi52<100?2:0)+" "+sym],["+Bas 52 sem.",dec(lo52,lo52<100?2:0)+" "+sym],["Payout",Math.round(25+r()*45)+" %"],["Score AllMyFunds",dec(a[7])+" / 10"]];
@@ -774,10 +796,20 @@ function renderDetail(a){
     const t=document.getElementById(b.dataset.s);if(t)t.scrollIntoView({behavior:"smooth",block:"start"});
   }));
 }
+function updateOffs(){
+  const dh=document.querySelector(".det-head");if(!dh)return;
+  const m=window.matchMedia("(max-width:1000px)").matches;
+  const tb=document.querySelector(".topbar");
+  const tbH=m&&tb?Math.round(tb.getBoundingClientRect().height):0;
+  if(m)dh.style.top=tbH+"px";
+  const o=dh.offsetHeight+tbH+6;
+  document.querySelectorAll(".det-sec").forEach(s=>s.style.scrollMarginTop=o+"px");
+}
+window.addEventListener("resize",updateOffs);
 function route(){
   const t=decodeURIComponent(location.hash.slice(1));
   const a=ASSETS.find(x=>x[1]===t);
-  if(a){renderDetail(a);vList.hidden=true;vDet.hidden=false;
+  if(a){vList.hidden=true;vDet.hidden=false;renderDetail(a);updateOffs();
     const c=document.querySelector(".content");if(c)c.scrollTop=0;window.scrollTo(0,0);}
   else{vDet.hidden=true;vList.hidden=false;vDet.innerHTML="";charts.length=0;}
 }
