@@ -173,6 +173,7 @@ a{color:inherit;text-decoration:none}
 
 /* ===== Topbar popovers ===== */
 .topbar{position:relative}
+@media(max-width:1000px){.topbar{position:sticky;top:0;z-index:20}}
 .topbar .icon-btn{margin-left:auto;position:relative}
 .bdg{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:#e74c3c;border:2px solid #fff}
 .avatar{cursor:pointer}
@@ -370,7 +371,8 @@ a{color:inherit;text-decoration:none}
 .seg-bar i.f{background:linear-gradient(90deg,#0BA5FF,#004AAD)}
 .alert{display:flex;gap:11px;padding:clamp(9px,1.1vh,12px) 0;align-items:flex-start}
 .alert+.alert{border-top:1px solid var(--line)}
-.al-ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.al-ic,.alert .al-ic{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:0}
+.al-ic svg{width:15px;height:15px;flex:0 0 auto}
 .al-ic.warn{background:#fdf3df;color:#b07b16}.al-ic.bad{background:#fdeaea;color:#c0392b}.al-ic.info{background:#e7f0ff;color:var(--blue)}
 .alert b{display:block;font-size:clamp(11.5px,0.95vw,13px)}
 .alert span{display:block;font-size:clamp(10px,0.82vw,11.5px);color:var(--gray);line-height:1.45}
@@ -406,6 +408,7 @@ a{color:inherit;text-decoration:none}
 .legend-inline{flex-wrap:wrap}
 @media(max-width:1000px){
   .kpis.k4{grid-template-columns:1fr 1fr}
+  .kpis.k4 .kpi:last-child{grid-column:auto}
   .ia-grid{grid-template-columns:1fr}
   .two-col{grid-template-columns:1fr}
   .chat{max-height:52vh}
