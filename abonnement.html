@@ -132,8 +132,8 @@ a{color:inherit;text-decoration:none}
   .app{grid-template-columns:1fr;height:auto}
   .main{height:auto;overflow:visible}
   .sidebar{display:none}
-  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20}
-  .topbar h1{font-size:21px}
+  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20;gap:14px}
+  .topbar h1{font-size:20px;white-space:normal;overflow:visible;line-height:1.18}
     .topbar>.icon-btn{margin-left:auto}
   .content{display:flex;flex-direction:column;padding:6px 16px 96px;gap:10px;flex:none}
   .rt-wrap{display:contents}
@@ -163,7 +163,7 @@ a{color:inherit;text-decoration:none}
   .tabbar svg{width:24px;height:24px}
 }
 @media(max-width:430px){
-  .topbar h1{font-size:19px}
+  .topbar h1{font-size:18px}
   .card-title{font-size:16px}
   .donut-row{gap:10px}
   .donut-legend{font-size:clamp(11.5px,3.3vw,13px);white-space:normal}
@@ -276,6 +276,55 @@ a{color:inherit;text-decoration:none}
 .sheet-list a{padding:13px 4px;font-size:14.5px;font-weight:500;color:#3c4655;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
 .sheet-list a:first-child{border-top:none}
 .sheet-list a svg{color:#9aa3b2;flex:0 0 auto}
+
+/* ===== Abonnement : modale formules + paiement ===== */
+.sub-veil{position:fixed;inset:0;background:rgba(10,20,40,.5);z-index:130;display:none;align-items:center;justify-content:center;padding:18px}
+.sub-veil.open{display:flex}
+.sub-modal{background:#fff;border-radius:18px;width:min(760px,100%);max-height:min(90vh,760px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px -18px rgba(0,30,90,.45)}
+.sub-h{padding:15px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sub-h b{font-size:clamp(15px,1.3vw,17px)}
+.sub-h .x{background:none;border:none;color:var(--gray);cursor:pointer;font-size:25px;line-height:1;padding:0 4px}
+.sub-body{overflow-y:auto;padding:18px 20px 22px}
+.cyc-wrap{display:flex;justify-content:center}
+.cyc{display:inline-flex;background:#eef2f8;border-radius:999px;padding:3px;margin:0 0 18px;gap:2px}
+.cyc button{border:none;background:none;border-radius:999px;padding:7px 15px;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--gray);cursor:pointer;display:inline-flex;align-items:center}
+.cyc button.on{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.cyc .save{color:#1d8a4e;font-size:10px;margin-left:5px;font-weight:700}
+.plans3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.plan-c{border:1.5px solid var(--line2);border-radius:16px;padding:17px 15px 15px;display:flex;flex-direction:column;position:relative}
+.plan-c.reco{border-color:var(--blue);box-shadow:0 12px 32px -16px rgba(37,99,201,.55)}
+.plan-c .ribbon{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:3px 11px;white-space:nowrap}
+.plan-c .pn{font-weight:700;font-size:15px}
+.plan-c .pp{font-weight:800;font-size:clamp(20px,2vw,26px);margin:7px 0 0}
+.plan-c .pp small{font-size:.5em;font-weight:600;color:var(--gray)}
+.plan-c .pcyc{font-size:10.5px;color:var(--muted);min-height:14px;margin-top:2px}
+.plan-c ul{list-style:none;margin:13px 0 15px;padding:0;display:flex;flex-direction:column;gap:8px;flex:1}
+.plan-c li{display:flex;gap:7px;font-size:11.8px;color:#3c4655;line-height:1.32}
+.plan-c li svg{flex:0 0 auto;color:#1d8a4e;margin-top:1px}
+.plan-c .pbtn{border:none;border-radius:10px;padding:10px;font-family:inherit;font-weight:600;font-size:12.5px;cursor:pointer;background:var(--blue);color:#fff;width:100%}
+.plan-c .pbtn.out{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.plan-c .pbtn.cur{background:#eef2f8;color:var(--gray);cursor:default}
+.co-sum{background:#f6f9fd;border:1px solid var(--line);border-radius:13px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.co-sum .l{font-weight:600;font-size:13.5px}
+.co-sum .r{font-weight:800;font-size:19px}
+.co-form{display:flex;flex-direction:column;gap:13px}
+.co-field label{display:block;font-size:11.5px;font-weight:600;color:var(--gray);margin-bottom:5px}
+.co-field input{width:100%;border:1.5px solid var(--line2);border-radius:10px;padding:11px 12px;font-family:inherit;font-size:13.5px}
+.co-field input:focus{outline:none;border-color:var(--blue)}
+.co-row{display:flex;gap:12px}.co-row .co-field{flex:1}
+.co-note{font-size:11px;color:var(--muted);display:flex;align-items:flex-start;gap:6px;margin-top:3px;line-height:1.35}
+.co-note svg{flex:0 0 auto;margin-top:1px}
+.co-actions{display:flex;gap:12px;margin-top:18px;align-items:center}
+.co-back{background:none;border:none;color:var(--gray);font-family:inherit;font-weight:600;font-size:12.5px;cursor:pointer}
+.co-pay{flex:1;background:var(--blue);color:#fff;border:none;border-radius:11px;padding:13px;font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer}
+.co-pay:hover{background:#0a3f8f}
+.co-ok{text-align:center;padding:16px 6px 8px}
+.co-ok .ic{width:64px;height:64px;border-radius:50%;background:#e7f6ee;color:#1d8a4e;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.co-ok h3{font-size:21px;margin:0 0 6px}
+.co-ok p{color:var(--gray);font-size:13px;margin:0 auto 18px;max-width:360px;line-height:1.45}
+.btn-danger{background:#fdecec;color:#c0392b;border:none;border-radius:10px;padding:clamp(9px,1.2vh,12px) 16px;font-weight:600;font-family:inherit;cursor:pointer;font-size:clamp(12px,0.95vw,13.5px)}
+.btn-danger:hover{background:#f9d9d9}
+@media(max-width:680px){ .plans3{grid-template-columns:1fr} .sub-modal{max-height:92vh} }
 </style>
 </head>
 <body>
@@ -300,7 +349,7 @@ a{color:inherit;text-decoration:none}
         <h4>Améliorez votre abonnement</h4>
       </div>
       <p>Plus de fonctionnalité. Plus de contrôle.</p>
-      <a class="up-btn" href="index.html#pricing">Améliorer Maintenant</a>
+      <a class="up-btn" href="abonnement.html?upgrade=1">Améliorer Maintenant</a>
     </div>
   </aside>
 
@@ -321,6 +370,7 @@ a{color:inherit;text-decoration:none}
         <div class="um-id"><b>Thomas Martin</b><span>thomas.martin@email.fr</span></div>
         <nav class="um">
           <a href="profil.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil &amp; Sécurité</a>
+          <a href="profil-investisseur.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Profil investisseur</a>
           <a href="comptes-connectes.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-6 9 6"/><path d="M5 10v9M19 10v9M9 10v9M15 10v9"/><path d="M3 21h18"/></svg>Comptes connectés</a>
           <a class="active" href="abonnement.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>Abonnement &amp; Parrainage</a>
           <a href="aide.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4 1c0 2-2.6 2.5-2.6 2.5"/><path d="M12 17h.01"/></svg>Aide &amp; Support</a>
@@ -334,9 +384,9 @@ a{color:inherit;text-decoration:none}
       <div class="two-col">
         <div class="col-stack">
           <div class="card">
-            <div class="card-head"><span class="card-title">Mon abonnement</span><span class="badge-plan">Standard</span></div>
-            <div class="plan-price">Gratuit</div>
-            <ul class="feat">
+            <div class="card-head"><span class="card-title">Mon abonnement</span><span class="badge-plan" id="planBadge">Standard</span></div>
+            <div class="plan-price" id="planPrice">Gratuit</div>
+            <ul class="feat" id="planFeats">
               <li><span class="ok">✓</span>Agrégation de vos comptes bancaires</li>
               <li><span class="ok">✓</span>Suivi du budget et des transactions</li>
               <li><span class="ok">✓</span>Cours « Débutant » de l’Académie</li>
@@ -344,16 +394,13 @@ a{color:inherit;text-decoration:none}
               <li class="no"><span>✗</span>Académie complète (Intermédiaire &amp; Avancé)</li>
               <li class="no"><span>✗</span>Outils d’optimisation fiscale</li>
             </ul>
-            <div class="plan-cta">
-              <a class="btn-p" href="index.html#pricing">Passer au Premium — 4,99 €/mois</a>
-              <a class="btn-o" href="index.html#pricing">Découvrir Expert — 9,99 €/mois</a>
-            </div>
+            <div class="plan-cta"><button class="btn-p" id="btnUpgrade" type="button">Améliorer maintenant</button><button class="btn-danger" id="btnCancel" type="button" hidden>Résilier mon abonnement</button></div>
           </div>
           <div class="card">
             <div class="card-head"><span class="card-title">Facturation</span></div>
-            <div class="bill-row"><span>Moyen de paiement</span><b>Aucun</b></div>
-            <div class="bill-row"><span>Prochaine échéance</span><b>—</b></div>
-            <div class="bill-row"><span>Historique de factures</span><b>Aucune facture</b></div>
+            <div class="bill-row"><span>Moyen de paiement</span><b id="billPay">Aucun</b></div>
+            <div class="bill-row"><span>Prochaine échéance</span><b id="billNext">—</b></div>
+            <div class="bill-row"><span>Historique de factures</span><b id="billHist">Aucune facture</b></div>
           </div>
         </div>
         <div class="card">
@@ -375,6 +422,12 @@ a{color:inherit;text-decoration:none}
   </div>
 </div>
 
+<div class="sub-veil" id="subVeil">
+  <div class="sub-modal" role="dialog" aria-modal="true" aria-label="Choisir une formule">
+    <div class="sub-h"><b id="subTitle">Choisir une formule</b><button class="x" id="subClose" type="button" aria-label="Fermer">&times;</button></div>
+    <div class="sub-body" id="subBody"></div>
+  </div>
+</div>
 <!-- mobile bottom nav -->
 <nav class="tabbar">
   <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span class="tb-lab">Accueil</span></a>
@@ -458,6 +511,156 @@ document.getElementById('fInvite').addEventListener('submit',e=>{
   veil.addEventListener('click',closeSheet);
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 })();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var STORE='amf_subscription_v1';
+  var PLANS={
+    gratuit:{name:'Gratuit',badge:'Standard',price:{mois:0,an:0},
+      feats:['Agr\u00e9gation de vos comptes bancaires','Suivi du budget et des transactions','Cours \u00ab\u00a0D\u00e9butant\u00a0\u00bb de l\u2019Acad\u00e9mie'],
+      missing:['Analyses & performance avanc\u00e9es','Acad\u00e9mie compl\u00e8te (Interm. & Avanc\u00e9)','Outils d\u2019optimisation fiscale'],
+      hl:['3 comptes connect\u00e9s','Suivi budget & transactions','Cours \u00ab\u00a0D\u00e9butant\u00a0\u00bb']},
+    premium:{name:'Premium',badge:'Premium',price:{mois:4.99,an:49.90},
+      feats:['Tout le plan Gratuit','Comptes connect\u00e9s illimit\u00e9s','Analyses & performance avanc\u00e9es','Acad\u00e9mie compl\u00e8te (Interm. & Avanc\u00e9)','Assistant IA illimit\u00e9'],
+      missing:['Outils d\u2019optimisation fiscale','Rapports fiscaux','Support prioritaire'],
+      hl:['Tout le plan Gratuit','Analyses & performance avanc\u00e9es','Acad\u00e9mie compl\u00e8te','Assistant IA illimit\u00e9']},
+    expert:{name:'Expert',badge:'Expert',price:{mois:9.99,an:99.90},
+      feats:['Tout le plan Premium','Outils d\u2019optimisation fiscale','Rapports fiscaux complets','Scanner de frais avanc\u00e9','Support prioritaire'],
+      missing:[],
+      hl:['Tout le plan Premium','Outils d\u2019optimisation fiscale','Rapports fiscaux complets','Support prioritaire']}
+  };
+  var ORDER=['gratuit','premium','expert'];
+  function load(){try{var s=localStorage.getItem(STORE);if(s)return JSON.parse(s);}catch(e){}return {plan:'gratuit',cycle:'mois'};}
+  function save(){try{localStorage.setItem(STORE,JSON.stringify(sub));}catch(e){}}
+  var sub=load();
+  function eur(n){return n.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+'\u00a0\u20ac';}
+  function addMonths(d,n){var x=new Date(d);x.setMonth(x.getMonth()+n);return x;}
+  function fdate(d){return d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});}
+  function ck(){return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';}
+
+  // ---- carte abonnement + facturation + carte upsell ----
+  function updateUpsell(){
+    var u=document.querySelector('.upgrade'); if(!u)return;
+    var h4=u.querySelector('h4'), pa=u.querySelector('p'), b=u.querySelector('.up-btn');
+    if(sub.plan==='gratuit'){
+      if(h4)h4.textContent='Am\u00e9liorez votre abonnement';
+      if(pa)pa.textContent='Plus de fonctionnalit\u00e9. Plus de contr\u00f4le.';
+      if(b){b.textContent='Am\u00e9liorer Maintenant';b.setAttribute('href','abonnement.html?upgrade=1');}
+    } else {
+      var L=PLANS[sub.plan].name;
+      if(h4)h4.textContent='Abonnement '+L+' actif';
+      if(pa)pa.textContent='Vous profitez de tous les avantages '+L+'.';
+      if(b){b.textContent='G\u00e9rer mon abonnement';b.setAttribute('href','abonnement.html');}
+    }
+  }
+  function renderCard(){
+    var P=PLANS[sub.plan];
+    document.getElementById('planBadge').textContent=P.badge;
+    document.getElementById('planPrice').innerHTML = sub.plan==='gratuit' ? 'Gratuit'
+      : eur(P.price[sub.cycle])+' <small style="font-size:.45em;color:var(--gray);font-weight:600">/'+(sub.cycle==='an'?'an':'mois')+'</small>';
+    var feats=P.feats.map(function(x){return '<li><span class="ok">\u2713</span>'+x+'</li>';})
+            .concat(P.missing.map(function(x){return '<li class="no"><span>\u2717</span>'+x+'</li>';})).join('');
+    document.getElementById('planFeats').innerHTML=feats;
+    var btn=document.getElementById('btnUpgrade');
+    btn.textContent = sub.plan==='gratuit' ? 'Am\u00e9liorer maintenant' : 'G\u00e9rer mon abonnement';
+    btn.className = sub.plan==='gratuit' ? 'btn-p' : 'btn-o';
+    document.getElementById('btnCancel').hidden = (sub.plan==='gratuit');
+    if(sub.plan==='gratuit'){
+      document.getElementById('billPay').textContent='Aucun';
+      document.getElementById('billNext').textContent='\u2014';
+      document.getElementById('billHist').textContent='Aucune facture';
+    } else {
+      document.getElementById('billPay').textContent='Visa \u2022\u2022 '+(sub.card||'4242');
+      var since=sub.since?new Date(sub.since):new Date();
+      document.getElementById('billNext').textContent=fdate(addMonths(since, sub.cycle==='an'?12:1));
+      document.getElementById('billHist').textContent='1 facture \u00b7 '+eur(P.price[sub.cycle]);
+    }
+    updateUpsell();
+  }
+
+  // ---- modale ----
+  var veil=document.getElementById('subVeil'), body=document.getElementById('subBody'), title=document.getElementById('subTitle');
+  var pick={cycle:sub.cycle, plan:null};
+  function open(){pick.cycle=sub.cycle; stepChoose(); veil.classList.add('open');}
+  function close(){veil.classList.remove('open');}
+
+  function stepChoose(){
+    title.textContent='Choisir une formule';
+    var cyc='<div class="cyc-wrap"><div class="cyc">'
+      +'<button data-c="mois" class="'+(pick.cycle==='mois'?'on':'')+'">Mensuel</button>'
+      +'<button data-c="an" class="'+(pick.cycle==='an'?'on':'')+'">Annuel<span class="save">2 mois offerts</span></button></div></div>';
+    var cards=ORDER.map(function(id){
+      var P=PLANS[id], reco=(id==='premium'), pr=P.price[pick.cycle];
+      var isCur = id===sub.plan && (id==='gratuit' || sub.cycle===pick.cycle);
+      var price = pr===0 ? 'Gratuit' : eur(pr);
+      var suf = pr===0 ? '\u00e0 vie' : '/'+(pick.cycle==='an'?'an':'mois');
+      var perm = (pr && pick.cycle==='an') ? 'soit '+eur(P.price.an/12)+'/mois' : '';
+      var li=P.hl.map(function(x){return '<li>'+ck()+x+'</li>';}).join('');
+      var btn = isCur ? '<button class="pbtn cur" disabled>Formule actuelle</button>'
+              : '<button class="pbtn'+(reco?'':' out')+'" data-pick="'+id+'">'+(id==='gratuit'?'Revenir au gratuit':'Choisir '+P.name)+'</button>';
+      return '<div class="plan-c'+(reco?' reco':'')+'">'+(reco?'<span class="ribbon">Recommand\u00e9</span>':'')
+        +'<div class="pn">'+P.name+'</div><div class="pp">'+price+'<small> '+suf+'</small></div>'
+        +'<div class="pcyc">'+perm+'</div><ul>'+li+'</ul>'+btn+'</div>';
+    }).join('');
+    body.innerHTML=cyc+'<div class="plans3">'+cards+'</div>';
+    body.querySelectorAll('.cyc button').forEach(function(b){b.addEventListener('click',function(){pick.cycle=b.getAttribute('data-c');stepChoose();});});
+    body.querySelectorAll('[data-pick]').forEach(function(b){b.addEventListener('click',function(){
+      var id=b.getAttribute('data-pick');
+      if(id==='gratuit'){ if(confirm('R\u00e9silier votre abonnement et revenir \u00e0 la formule Gratuite ?')) apply('gratuit'); return; }
+      pick.plan=id; stepCheckout();
+    });});
+  }
+  function stepCheckout(){
+    var P=PLANS[pick.plan];
+    title.textContent='Finaliser votre abonnement';
+    body.innerHTML=
+      '<div class="co-sum"><div class="l">'+P.name+' \u00b7 '+(pick.cycle==='an'?'facturation annuelle':'facturation mensuelle')+'</div>'
+      +'<div class="r">'+eur(P.price[pick.cycle])+'<small style="font-size:.55em;color:var(--gray);font-weight:600"> /'+(pick.cycle==='an'?'an':'mois')+'</small></div></div>'
+      +'<div class="co-form">'
+      +'<div class="co-field"><label>Nom sur la carte</label><input id="ccName" type="text" placeholder="Thomas Martin" autocomplete="off"></div>'
+      +'<div class="co-field"><label>Num\u00e9ro de carte</label><input id="ccNum" type="text" inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19" autocomplete="off"></div>'
+      +'<div class="co-row"><div class="co-field"><label>Expiration</label><input id="ccExp" type="text" inputmode="numeric" placeholder="MM/AA" maxlength="5" autocomplete="off"></div>'
+      +'<div class="co-field"><label>CVC</label><input id="ccCvc" type="text" inputmode="numeric" placeholder="123" maxlength="4" autocomplete="off"></div></div>'
+      +'<div class="co-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement simul\u00e9 \u2014 d\u00e9monstration p\u00e9dagogique, aucune carte n\u2019est d\u00e9bit\u00e9e.</div>'
+      +'</div>'
+      +'<div class="co-actions"><button class="co-back" id="coBack">\u2190 Retour</button>'
+      +'<button class="co-pay" id="coPay">Confirmer le paiement \u2014 '+eur(P.price[pick.cycle])+'</button></div>';
+    var num=document.getElementById('ccNum');
+    num.addEventListener('input',function(){num.style.borderColor='';var v=num.value.replace(/\D/g,'').slice(0,16);num.value=v.replace(/(.{4})/g,'$1 ').trim();});
+    var exp=document.getElementById('ccExp');
+    exp.addEventListener('input',function(){var v=exp.value.replace(/\D/g,'').slice(0,4);if(v.length>2)v=v.slice(0,2)+'/'+v.slice(2);exp.value=v;});
+    document.getElementById('coBack').addEventListener('click',stepChoose);
+    document.getElementById('coPay').addEventListener('click',function(){
+      if(num.value.replace(/\D/g,'').length<12){num.style.borderColor='#c0392b';num.focus();return;}
+      apply(pick.plan,pick.cycle); stepSuccess();
+    });
+  }
+  function stepSuccess(){
+    var P=PLANS[sub.plan];
+    title.textContent='C\u2019est fait\u202f!';
+    body.innerHTML='<div class="co-ok"><div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'
+      +'<h3>Bienvenue dans '+P.name+'\u202f!</h3>'
+      +'<p>Votre abonnement '+P.name+' est actif. Vous avez d\u00e9sormais acc\u00e8s \u00e0 toutes ses fonctionnalit\u00e9s, et votre prochaine \u00e9ch\u00e9ance appara\u00eet dans la facturation.</p>'
+      +'<button class="btn-p" id="coDone" type="button">Terminer</button></div>';
+    document.getElementById('coDone').addEventListener('click',close);
+  }
+  function apply(id,cycle){
+    sub.plan=id; if(cycle)sub.cycle=cycle;
+    if(id==='gratuit'){sub.since=null;} else {sub.since=new Date().toISOString(); sub.card='4242';}
+    save(); renderCard();
+  }
+
+  document.getElementById('btnUpgrade').addEventListener('click',open);
+  document.getElementById('btnCancel').addEventListener('click',function(){
+    if(confirm('R\u00e9silier votre abonnement '+PLANS[sub.plan].name+' et revenir \u00e0 la formule Gratuite ? Vous conserverez l\u2019acc\u00e8s jusqu\u2019\u00e0 la fin de la p\u00e9riode en cours.')) apply('gratuit');
+  });
+  document.getElementById('subClose').addEventListener('click',close);
+  veil.addEventListener('click',function(e){if(e.target===veil)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+
+  renderCard();
+  if(/[?&]upgrade=1/.test(location.search)||location.hash==='#upgrade'){ open(); }
+});
 </script>
 </body>
 </html>
