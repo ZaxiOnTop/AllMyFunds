@@ -132,8 +132,8 @@ a{color:inherit;text-decoration:none}
   .app{grid-template-columns:1fr;height:auto}
   .main{height:auto;overflow:visible}
   .sidebar{display:none}
-  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20}
-  .topbar h1{font-size:21px}
+  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20;gap:14px}
+  .topbar h1{font-size:20px;white-space:normal;overflow:visible;line-height:1.18}
     .topbar>.icon-btn{margin-left:auto}
   .content{display:flex;flex-direction:column;padding:6px 16px 96px;gap:10px;flex:none}
   .rt-wrap{display:contents}
@@ -163,7 +163,7 @@ a{color:inherit;text-decoration:none}
   .tabbar svg{width:24px;height:24px}
 }
 @media(max-width:430px){
-  .topbar h1{font-size:19px}
+  .topbar h1{font-size:18px}
   .card-title{font-size:16px}
   .donut-row{gap:10px}
   .donut-legend{font-size:clamp(11.5px,3.3vw,13px);white-space:normal}
@@ -436,6 +436,12 @@ a{color:inherit;text-decoration:none}
   .fee-alt{margin-left:0}
   .gain-banner .gb-val{margin-left:0;text-align:left;width:100%}
 }
+.ia-context{display:flex;align-items:center;gap:9px;background:#eef5ff;border:1px solid #d4e4fb;border-radius:12px;padding:9px 12px;margin-bottom:10px;font-size:clamp(11px,0.9vw,12.5px);color:#274b7d;line-height:1.35}
+.ia-context .iac-ic{flex:0 0 auto;color:#2563c9;display:flex}
+.ia-context .iac-tx{flex:1;min-width:0}
+.ia-context b{font-weight:700}
+.ia-context a{flex:0 0 auto;color:#2563c9;font-weight:600;text-decoration:none;white-space:nowrap}
+.ia-context a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -460,7 +466,7 @@ a{color:inherit;text-decoration:none}
         <h4>Améliorez votre abonnement</h4>
       </div>
       <p>Plus de fonctionnalité. Plus de contrôle.</p>
-      <a class="up-btn" href="index.html#pricing">Améliorer Maintenant</a>
+      <a class="up-btn" href="abonnement.html?upgrade=1">Améliorer Maintenant</a>
     </div>
   </aside>
 
@@ -481,6 +487,7 @@ a{color:inherit;text-decoration:none}
         <div class="um-id"><b>Thomas Martin</b><span>thomas.martin@email.fr</span></div>
         <nav class="um">
           <a href="profil.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil &amp; Sécurité</a>
+          <a href="profil-investisseur.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Profil investisseur</a>
           <a href="comptes-connectes.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-6 9 6"/><path d="M5 10v9M19 10v9M9 10v9M15 10v9"/><path d="M3 21h18"/></svg>Comptes connectés</a>
           <a href="abonnement.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>Abonnement &amp; Parrainage</a>
           <a href="aide.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4 1c0 2-2.6 2.5-2.6 2.5"/><path d="M12 17h.01"/></svg>Aide &amp; Support</a>
@@ -494,6 +501,7 @@ a{color:inherit;text-decoration:none}
       <div class="pat-grid ia-grid">
         <div class="card c-chat">
           <div class="card-head"><span class="card-title">Assistant IA</span><span class="ia-status"><span class="ia-dot"></span>En ligne · analyse de votre patrimoine</span></div>
+          <div class="ia-context" id="iaCtx"></div>
           <div class="chat" id="chat"></div>
           <div class="chips" id="chips"></div>
           <div class="chat-in">
@@ -539,6 +547,25 @@ function dec(n,d){return n.toFixed(d===undefined?1:d).replace(".",",");}
 const SUB=[["Diversification",58,"#e8a13c"],["\u00c9pargne de pr\u00e9caution",42,"#c0392b"],["Frais",61,"#e8a13c"],["Endettement",88,"#1d8a4e"],["Performance",81,"#1d8a4e"]];
 document.getElementById("subScores").innerHTML=SUB.map(s=>'<div class="vrow"><span class="v-l">'+s[0]+'</span><div class="cf-bar"><i style="width:'+s[1]+'%;background:'+s[2]+'"></i></div><span class="v-v">'+s[1]+'</span></div>').join("");
 const chat=document.getElementById("chat"),inp=document.getElementById("msg");
+/* --- personnalisation via le profil investisseur --- */
+var INV=(function(){try{var s=localStorage.getItem("amf_investor_profile_v1");if(s)return JSON.parse(s);}catch(e){}return null;})()
+        || {risk:"equilibre",horizon:"long",goals:["retraite","fructifier"],esg:true,tone:"pedagogique"};
+var _RL={prudent:"Prudent",equilibre:"\u00c9quilibr\u00e9",dynamique:"Dynamique"};
+var _HL={court:"court terme",moyen:"moyen terme",long:"long terme"};
+var _TL={concis:"concis",pedagogique:"p\u00e9dagogique",detaille:"d\u00e9taill\u00e9"};
+var _GL={retraite:"retraite",fructifier:"\u00e9pargne",immo:"apport immo",revenus:"revenus compl\u00e9mentaires",transmission:"transmission",fiscalite:"fiscalit\u00e9"};
+var _SLD='<span class="iac-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></span>';
+(function(){
+  var ctx=document.getElementById("iaCtx"); if(!ctx)return;
+  if(INV){
+    var g=(INV.goals||[]).map(function(x){return _GL[x]||x;}).slice(0,2).join(", ");
+    ctx.innerHTML=_SLD+'<span class="iac-tx">Personnalis\u00e9 pour votre profil <b>'+(_RL[INV.risk]||"\u00c9quilibr\u00e9")+'</b> \u00b7 horizon <b>'+(_HL[INV.horizon]||"long terme")+'</b>'+(g?' \u00b7 '+g:"")+(INV.esg?' \u00b7 ESG':"")+'</span><a href="profil-investisseur.html">Modifier</a>';
+    window.__INVNOTE='D\u2019apr\u00e8s votre profil <b>'+(_RL[INV.risk]||"\u00c9quilibr\u00e9")+'</b> (horizon '+(_HL[INV.horizon]||"long terme")+'), j\u2019adapte mes conseils'+(INV.tone?' avec un ton '+(_TL[INV.tone]||"p\u00e9dagogique"):"")+'. ';
+  }else{
+    ctx.innerHTML=_SLD+'<span class="iac-tx">Renseignez votre <b>profil investisseur</b> pour des conseils adapt\u00e9s \u00e0 vos objectifs.</span><a href="profil-investisseur.html">Compl\u00e9ter</a>';
+    window.__INVNOTE="";
+  }
+})();
 function add(cls,html){const b=el('<div class="bub '+cls+'">'+html+'</div>');chat.appendChild(b);chat.scrollTop=chat.scrollHeight;return b;}
 function typing(){return add("ai",'<span class="typing"><i></i><i></i><i></i></span>');}
 const REALLOC='<b>Proposition de r\u00e9allocation</b><br>Voici la cible que je recommande pour r\u00e9duire votre risque sans sacrifier le rendement :'
@@ -576,7 +603,7 @@ inp.addEventListener("keydown",e=>{if(e.key==="Enter")send();});
 const CHIPS=["Comment r\u00e9duire mon risque ?","O\u00f9 placer 5 000 \u20ac ?","Mon \u00e9pargne de pr\u00e9caution","Comment baisser mes frais ?"];
 document.getElementById("chips").innerHTML=CHIPS.map(c=>'<button type="button">'+c+'</button>').join("");
 document.querySelectorAll("#chips button").forEach(b=>b.addEventListener("click",()=>send(b.textContent)));
-add("ai","Bonjour Thomas \ud83d\udc4b J'ai analys\u00e9 votre patrimoine de <b>94 400 \u20ac</b>. Trois points ressortent : votre secteur <b>Tech est surpond\u00e9r\u00e9 \u00e0 34 %</b> (cible 20 %), votre <b>\u00e9pargne de pr\u00e9caution couvre 2,1 mois</b> de d\u00e9penses (cible 3 \u00e0 6 mois), et vos <b>frais d'assurance-vie</b> sont au-dessus du march\u00e9. Par quoi souhaitez-vous commencer ?");
+add("ai","Bonjour Thomas \ud83d\udc4b J'ai analys\u00e9 votre patrimoine de <b>94 400 \u20ac</b>. Trois points ressortent : votre secteur <b>Tech est surpond\u00e9r\u00e9 \u00e0 34 %</b> (cible 20 %), votre <b>\u00e9pargne de pr\u00e9caution couvre 2,1 mois</b> de d\u00e9penses (cible 3 \u00e0 6 mois), et vos <b>frais d'assurance-vie</b> sont au-dessus du march\u00e9. "+(window.__INVNOTE||"")+"Par quoi souhaitez-vous commencer ?");
 
 </script>
 <script>
@@ -634,5 +661,6 @@ add("ai","Bonjour Thomas \ud83d\udc4b J'ai analys\u00e9 votre patrimoine de <b>9
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 })();
 </script>
+<script>(function(){try{var s=localStorage.getItem('amf_subscription_v1');if(!s)return;var p=JSON.parse(s);if(!p||!p.plan||p.plan==='gratuit')return;var L=({premium:'Premium',expert:'Expert'})[p.plan]||'';var u=document.querySelector('.upgrade');if(!u)return;var h4=u.querySelector('h4'),pa=u.querySelector('p'),b=u.querySelector('.up-btn');if(h4)h4.textContent='Abonnement '+L+' actif';if(pa)pa.textContent='Vous profitez de tous les avantages '+L+'.';if(b){b.textContent='G\u00e9rer mon abonnement';b.setAttribute('href','abonnement.html');}}catch(e){}})();</script>
 </body>
 </html>
