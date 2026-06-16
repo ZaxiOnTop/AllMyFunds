@@ -132,8 +132,8 @@ a{color:inherit;text-decoration:none}
   .app{grid-template-columns:1fr;height:auto}
   .main{height:auto;overflow:visible}
   .sidebar{display:none}
-  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20}
-  .topbar h1{font-size:21px}
+  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20;gap:14px}
+  .topbar h1{font-size:20px;white-space:normal;overflow:visible;line-height:1.18}
     .topbar>.icon-btn{margin-left:auto}
   .content{display:flex;flex-direction:column;padding:6px 16px 96px;gap:10px;flex:none}
   .rt-wrap{display:contents}
@@ -163,7 +163,7 @@ a{color:inherit;text-decoration:none}
   .tabbar svg{width:24px;height:24px}
 }
 @media(max-width:430px){
-  .topbar h1{font-size:19px}
+  .topbar h1{font-size:18px}
   .card-title{font-size:16px}
   .donut-row{gap:10px}
   .donut-legend{font-size:clamp(11.5px,3.3vw,13px);white-space:normal}
@@ -451,7 +451,7 @@ input[type=range]{width:100%;accent-color:var(--blue);height:22px;cursor:pointer
         <h4>Améliorez votre abonnement</h4>
       </div>
       <p>Plus de fonctionnalité. Plus de contrôle.</p>
-      <a class="up-btn" href="index.html#pricing">Améliorer Maintenant</a>
+      <a class="up-btn" href="abonnement.html?upgrade=1">Améliorer Maintenant</a>
     </div>
   </aside>
 
@@ -472,6 +472,7 @@ input[type=range]{width:100%;accent-color:var(--blue);height:22px;cursor:pointer
         <div class="um-id"><b>Thomas Martin</b><span>thomas.martin@email.fr</span></div>
         <nav class="um">
           <a href="profil.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil &amp; Sécurité</a>
+          <a href="profil-investisseur.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Profil investisseur</a>
           <a href="comptes-connectes.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-6 9 6"/><path d="M5 10v9M19 10v9M9 10v9M15 10v9"/><path d="M3 21h18"/></svg>Comptes connectés</a>
           <a href="abonnement.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>Abonnement &amp; Parrainage</a>
           <a href="aide.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4 1c0 2-2.6 2.5-2.6 2.5"/><path d="M12 17h.01"/></svg>Aide &amp; Support</a>
@@ -652,5 +653,6 @@ compute();
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 })();
 </script>
+<script>(function(){try{var s=localStorage.getItem('amf_subscription_v1');if(!s)return;var p=JSON.parse(s);if(!p||!p.plan||p.plan==='gratuit')return;var L=({premium:'Premium',expert:'Expert'})[p.plan]||'';var u=document.querySelector('.upgrade');if(!u)return;var h4=u.querySelector('h4'),pa=u.querySelector('p'),b=u.querySelector('.up-btn');if(h4)h4.textContent='Abonnement '+L+' actif';if(pa)pa.textContent='Vous profitez de tous les avantages '+L+'.';if(b){b.textContent='G\u00e9rer mon abonnement';b.setAttribute('href','abonnement.html');}}catch(e){}})();</script>
 </body>
 </html>
