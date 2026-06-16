@@ -132,8 +132,8 @@ a{color:inherit;text-decoration:none}
   .app{grid-template-columns:1fr;height:auto}
   .main{height:auto;overflow:visible}
   .sidebar{display:none}
-  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20}
-  .topbar h1{font-size:21px}
+  .topbar{padding:18px 18px;position:sticky;top:0;z-index:20;gap:14px}
+  .topbar h1{font-size:20px;white-space:normal;overflow:visible;line-height:1.18}
     .topbar>.icon-btn{margin-left:auto}
   .content{display:flex;flex-direction:column;padding:6px 16px 96px;gap:10px;flex:none}
   .rt-wrap{display:contents}
@@ -163,7 +163,7 @@ a{color:inherit;text-decoration:none}
   .tabbar svg{width:24px;height:24px}
 }
 @media(max-width:430px){
-  .topbar h1{font-size:19px}
+  .topbar h1{font-size:18px}
   .card-title{font-size:16px}
   .donut-row{gap:10px}
   .donut-legend{font-size:clamp(11.5px,3.3vw,13px);white-space:normal}
@@ -325,6 +325,8 @@ a{color:inherit;text-decoration:none}
 .a-col{font-size:clamp(11px,0.92vw,13px);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .a-px{font-weight:700}
 .a-score{display:flex;align-items:center;gap:9px;min-width:0}
+.risk-pill{display:inline-flex;align-items:center;gap:6px;font-size:clamp(10px,0.82vw,11.8px);font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.rdot{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
 .a-score b{font-size:clamp(11.5px,0.95vw,13.5px);flex:0 0 auto}
 .sc-bar{flex:1;height:6px;border-radius:99px;background:#eef1f6;min-width:24px;overflow:hidden}
 .sc-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#0BA5FF,#004AAD)}
@@ -466,7 +468,7 @@ input[type=range]{width:100%;accent-color:var(--blue);height:22px;cursor:pointer
         <h4>Améliorez votre abonnement</h4>
       </div>
       <p>Plus de fonctionnalité. Plus de contrôle.</p>
-      <a class="up-btn" href="index.html#pricing">Améliorer Maintenant</a>
+      <a class="up-btn" href="abonnement.html?upgrade=1">Améliorer Maintenant</a>
     </div>
   </aside>
 
@@ -487,6 +489,7 @@ input[type=range]{width:100%;accent-color:var(--blue);height:22px;cursor:pointer
         <div class="um-id"><b>Thomas Martin</b><span>thomas.martin@email.fr</span></div>
         <nav class="um">
           <a href="profil.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil &amp; Sécurité</a>
+          <a href="profil-investisseur.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>Profil investisseur</a>
           <a href="comptes-connectes.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-6 9 6"/><path d="M5 10v9M19 10v9M9 10v9M15 10v9"/><path d="M3 21h18"/></svg>Comptes connectés</a>
           <a href="abonnement.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19"/></svg>Abonnement &amp; Parrainage</a>
           <a href="aide.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4 1c0 2-2.6 2.5-2.6 2.5"/><path d="M12 17h.01"/></svg>Aide &amp; Support</a>
@@ -507,12 +510,12 @@ input[type=range]{width:100%;accent-color:var(--blue);height:22px;cursor:pointer
             <div class="seg" id="segType"><button type="button" class="on" data-v="tous">Tous</button><button type="button" data-v="action">Actions</button><button type="button" data-v="etf">ETF</button><button type="button" data-v="crypto">Crypto</button></div>
             <div class="dd" id="ddSect"><button class="pill dd-toggle" type="button"><span class="dd-label">Secteur</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
             <div class="dd" id="ddDiv"><button class="pill dd-toggle" type="button"><span class="dd-label">Dividende</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
-            <div class="dd" id="ddSort"><button class="pill dd-toggle" type="button"><span class="dd-label">Score</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
+            <div class="dd" id="ddSort"><button class="pill dd-toggle" type="button"><span class="dd-label">Risque</span><svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="dd-menu"></div></div>
           </div>
         </div>
         <div class="card">
           <div class="card-head"><span class="card-title">Résultats</span><span class="scr-count" id="cnt"></span></div>
-          <div class="scr-head"><span>Actif</span><span>Secteur</span><span>Prix</span><span>Perf. 1 an</span><span>Dividende</span><span>Score</span></div>
+          <div class="scr-head"><span>Actif</span><span>Secteur</span><span>Prix</span><span>Perf. 1 an</span><span>Dividende</span><span>Risque</span></div>
           <div id="list"></div>
         </div>
       </div>
@@ -605,8 +608,23 @@ function priceNum(s){return parseFloat(s.replace(/[\u202f\s]/g,"").replace(",","
 function curSym(s){return s.indexOf("$")>=0?"$":"\u20ac";}
 
 /* ---------- screener ---------- */
-let fType="tous", fSect="Tous", fDiv=0, fSort="score", q="";
+let fType="tous", fSect="Tous", fDiv=0, fSort="risque", q="";
 const SECTS=["Tous"].concat([...new Set(ASSETS.map(a=>a[3]))]);
+/* ---------- niveau de risque (dérivé du type/secteur) ---------- */
+var RISKLAB=[null,"Tr\u00e8s faible","Faible","Mod\u00e9r\u00e9","\u00c9lev\u00e9","Tr\u00e8s \u00e9lev\u00e9"];
+var RISKCOL=[null,"#1d8a4e","#1d8a4e","#9a6b00","#c25e00","#c0392b"];
+var RISKBG =[null,"#e7f6ee","#e7f6ee","#fdf3da","#fdeede","#fdecec"];
+function riskLevel(a){
+  if(a[2]==="crypto")return 5;
+  if(a[2]==="etf"){
+    if(a[3]==="Monde"||a[3]==="\u00c9tats-Unis"||a[3]==="Europe")return 2;
+    if(a[3]==="\u00c9mergents")return 4;
+    return 3;
+  }
+  if(a[3]==="Tech"||a[3]==="Semi-conducteurs")return 4;
+  return 3;
+}
+function riskInfo(a){var l=riskLevel(a);return {lvl:l,lab:RISKLAB[l],col:RISKCOL[l],bg:RISKBG[l]};}
 function row(a){
   const yld=a[6]==null?'<span style="color:var(--muted)">\u2014</span>':dec(a[6])+" %";
   return '<div class="arow" data-t="'+a[1]+'" role="button" tabindex="0">'
@@ -615,7 +633,7 @@ function row(a){
    +'<div class="a-col a-px">'+a[4]+'</div>'
    +'<div class="a-col a-perf">'+pb(a[5])+'</div>'
    +'<div class="a-col a-yld">'+yld+'</div>'
-   +'<div class="a-score"><b>'+dec(a[7])+'</b><div class="sc-bar"><i style="width:'+(a[7]*10)+'%"></i></div></div>'
+   +(function(){var ri=riskInfo(a);return '<div class="a-score"><span class="risk-pill" style="color:'+ri.col+';background:'+ri.bg+'"><span class="rdot" style="background:'+ri.col+'"></span>'+ri.lab+'</span></div>';})()
    +'</div>';
 }
 function render(){
@@ -624,7 +642,7 @@ function render(){
     (fSect==="Tous"||a[3]===fSect)&&
     (fDiv===0||(a[6]!=null&&a[6]>=fDiv))&&
     (q===""||a[0].toLowerCase().includes(q)||a[1].toLowerCase().includes(q)));
-  l=l.slice().sort((a,b)=>fSort==="nom"?a[0].localeCompare(b[0]):fSort==="perf"?b[5]-a[5]:fSort==="div"?(b[6]||0)-(a[6]||0):b[7]-a[7]);
+  l=l.slice().sort((a,b)=>fSort==="nom"?a[0].localeCompare(b[0]):fSort==="perf"?b[5]-a[5]:fSort==="div"?(b[6]||0)-(a[6]||0):riskLevel(a)-riskLevel(b));
   document.getElementById("cnt").textContent=l.length+" actif"+(l.length>1?"s":"");
   document.getElementById("list").innerHTML=l.length?l.map(row).join(""):'<div class="scr-empty">Aucun actif ne correspond \u00e0 vos filtres.</div>';
 }
@@ -635,7 +653,7 @@ document.querySelectorAll("#segType button").forEach(b=>b.addEventListener("clic
 }));
 makeDropdown("ddSect",SECTS,SECTS.map(s=>s==="Tous"?"Tous secteurs":s),v=>{fSect=v;render();});
 makeDropdown("ddDiv",["0","1","2","4"],["Tous dividendes","\u2265 1 %","\u2265 2 %","\u2265 4 %"],v=>{fDiv=parseFloat(v);render();});
-makeDropdown("ddSort",["score","perf","div","nom"],["Score","Perf. 1 an","Dividende","Nom A\u2192Z"],v=>{fSort=v;render();});
+makeDropdown("ddSort",["risque","perf","div","nom"],["Risque","Perf. 1 an","Dividende","Nom A\u2192Z"],v=>{fSort=v;render();});
 render();
 document.getElementById("list").addEventListener("click",e=>{
   const r=e.target.closest(".arow");if(r)location.hash=encodeURIComponent(r.dataset.t);
@@ -730,9 +748,9 @@ function renderDetail(a){
   h+='<div class="anc" id="anc">'+SECS.map((s,i)=>'<button type="button"'+(i===0?' class="on"':'')+' data-s="'+s[0]+'">'+s[1]+'</button>').join("")+'</div></div>';
   /* stats */
   let st;
-  if(isA)st=[["Capitalisation",dec(cap,0)+" Mds "+sym],["PER",dec(per)],["Rendement",a[6]!=null?dec(a[6])+" %":"\u2014"],["B\u00eata",dec(beta,2)],["+Haut 52 sem.",dec(hi52,hi52<100?2:0)+" "+sym],["+Bas 52 sem.",dec(lo52,lo52<100?2:0)+" "+sym],["Payout",Math.round(25+r()*45)+" %"],["Score AllMyFunds",dec(a[7])+" / 10"]];
-  else if(isE)st=[["Encours",dec(cap,1)+" Mds \u20ac"],["Frais (TER)",dec(0.07+r()*0.35,2)+" %"],["Nb de lignes",Math.round(40+r()*1500)],["R\u00e9plication",r()>0.4?"Physique":"Synth\u00e9tique"],["Rendement",a[6]!=null?dec(a[6])+" %":"\u2014"],["\u00c9ligible PEA",["CW8","ESE","PUST","C6E"].includes(a[1])?"Oui":"Non"],["Devise",sym==="$"?"USD":"EUR"],["Score AllMyFunds",dec(a[7])+" / 10"]];
-  else st=[["Capitalisation",dec(cap,0)+" Mds \u20ac"],["Volume 24 h",dec(cap*(0.02+r()*0.05),1)+" Mds \u20ac"],["Offre en circulation",a[1]==="BTC"?"19,8 M":a[1]==="ETH"?"120 M":dec(300+r()*400,0)+" M"],["Offre max",a[1]==="BTC"?"21 M":"\u2014"],["ATH",eur(px*(1.05+r()*0.6))],["Dominance",dec(r()*55+2)+" %"],["Volatilit\u00e9 90 j",dec(35+r()*40,0)+" %"],["Score AllMyFunds",dec(a[7])+" / 10"]];
+  if(isA)st=[["Capitalisation",dec(cap,0)+" Mds "+sym],["PER",dec(per)],["Rendement",a[6]!=null?dec(a[6])+" %":"\u2014"],["B\u00eata",dec(beta,2)],["+Haut 52 sem.",dec(hi52,hi52<100?2:0)+" "+sym],["+Bas 52 sem.",dec(lo52,lo52<100?2:0)+" "+sym],["Payout",Math.round(25+r()*45)+" %"],["Niveau de risque",riskInfo(a).lab]];
+  else if(isE)st=[["Encours",dec(cap,1)+" Mds \u20ac"],["Frais (TER)",dec(0.07+r()*0.35,2)+" %"],["Nb de lignes",Math.round(40+r()*1500)],["R\u00e9plication",r()>0.4?"Physique":"Synth\u00e9tique"],["Rendement",a[6]!=null?dec(a[6])+" %":"\u2014"],["\u00c9ligible PEA",["CW8","ESE","PUST","C6E"].includes(a[1])?"Oui":"Non"],["Devise",sym==="$"?"USD":"EUR"],["Niveau de risque",riskInfo(a).lab]];
+  else st=[["Capitalisation",dec(cap,0)+" Mds \u20ac"],["Volume 24 h",dec(cap*(0.02+r()*0.05),1)+" Mds \u20ac"],["Offre en circulation",a[1]==="BTC"?"19,8 M":a[1]==="ETH"?"120 M":dec(300+r()*400,0)+" M"],["Offre max",a[1]==="BTC"?"21 M":"\u2014"],["ATH",eur(px*(1.05+r()*0.6))],["Dominance",dec(r()*55+2)+" %"],["Volatilit\u00e9 90 j",dec(35+r()*40,0)+" %"],["Niveau de risque",riskInfo(a).lab]];
   h+=secCard("s-stats","Statistiques",'<div class="stat-grid">'+st.map(s=>statBox(s[0],s[1])).join("")+'</div>');
   /* \u00e0 propos */
   let facts;
@@ -873,5 +891,6 @@ route();
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSheet();});
 })();
 </script>
+<script>(function(){try{var s=localStorage.getItem('amf_subscription_v1');if(!s)return;var p=JSON.parse(s);if(!p||!p.plan||p.plan==='gratuit')return;var L=({premium:'Premium',expert:'Expert'})[p.plan]||'';var u=document.querySelector('.upgrade');if(!u)return;var h4=u.querySelector('h4'),pa=u.querySelector('p'),b=u.querySelector('.up-btn');if(h4)h4.textContent='Abonnement '+L+' actif';if(pa)pa.textContent='Vous profitez de tous les avantages '+L+'.';if(b){b.textContent='G\u00e9rer mon abonnement';b.setAttribute('href','abonnement.html');}}catch(e){}})();</script>
 </body>
 </html>
