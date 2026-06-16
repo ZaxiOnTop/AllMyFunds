@@ -521,6 +521,13 @@ a{color:inherit;text-decoration:none}
   .hero{padding-top:54px}
   .hero .hero-copy{padding-top:20px}
 }
+.price-toggle{display:flex;width:max-content;max-width:100%;margin:34px auto 0;gap:4px;background:#eef2f8;border-radius:999px;padding:5px}
+.pt-btn{border:none;background:none;border-radius:999px;padding:9px 20px;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--gray);cursor:pointer;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.pt-btn.on{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,30,90,.12)}
+.pt-save{font-size:11px;color:#1d8a4e;font-weight:700;background:#e7f6ee;border-radius:999px;padding:2px 8px}
+.price-sub{font-size:13px;color:var(--gray);font-weight:500;margin:-14px 0 18px;min-height:18px}
+.plan.featured .price-sub{color:#cfe6ff}
+@media(max-width:560px){ .pt-btn{padding:9px 15px;font-size:13.5px} }
 </style>
 </head>
 <body>
@@ -724,6 +731,10 @@ a{color:inherit;text-decoration:none}
   <div class="wrap">
     <span class="kicker">Abonnements</span>
     <h2 class="section-title">Choisissez votre niveau de pilotage.</h2>
+    <div class="price-toggle" id="priceToggle">
+      <button type="button" class="pt-btn on" data-c="mois">Mensuel</button>
+      <button type="button" class="pt-btn" data-c="an">Annuel<span class="pt-save">2 mois offerts</span></button>
+    </div>
     <div class="plans">
 
       <div class="plan">
@@ -743,7 +754,8 @@ a{color:inherit;text-decoration:none}
         <span class="badge">Populaire</span>
         <h3>Premium</h3>
         <p class="desc">Le pack idéal pour piloter activement votre performance et optimiser votre stratégie patrimoniale.</p>
-        <div class="price">4,99 € <span>/ mois</span></div>
+        <div class="price" id="pricePrem">4,99 € <span>/ mois</span></div>
+        <div class="price-sub" id="subPrem"></div>
         <ul>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Synchronisations illimitées</li>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Scanner de frais automatique</li>
@@ -756,7 +768,8 @@ a{color:inherit;text-decoration:none}
       <div class="plan">
         <h3>Expert</h3>
         <p class="desc">Des outils de précision et un accompagnement fiscal pour les investisseurs actifs et les freelances.</p>
-        <div class="price">9,99 € <span>/ mois</span></div>
+        <div class="price" id="priceExp">9,99 € <span>/ mois</span></div>
+        <div class="price-sub" id="subExp"></div>
         <ul>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#004AAD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Synchronisations illimitées</li>
           <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#004AAD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Rapports fiscaux automatisés</li>
@@ -845,6 +858,24 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll('#mobileMenu a').forEach(function(a){
     a.addEventListener('click',close);
   });
+})();
+</script>
+<script>
+(function(){
+  var t=document.getElementById('priceToggle'); if(!t)return;
+  var pp=document.getElementById('pricePrem'), sp=document.getElementById('subPrem');
+  var pe=document.getElementById('priceExp'), se=document.getElementById('subExp');
+  function set(c){
+    t.querySelectorAll('.pt-btn').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-c')===c);});
+    if(c==='an'){
+      pp.innerHTML='49,90 € <span>/ an</span>'; sp.textContent='soit 4,16 €/mois · 2 mois offerts';
+      pe.innerHTML='99,90 € <span>/ an</span>'; se.textContent='soit 8,33 €/mois · 2 mois offerts';
+    }else{
+      pp.innerHTML='4,99 € <span>/ mois</span>'; sp.textContent='';
+      pe.innerHTML='9,99 € <span>/ mois</span>'; se.textContent='';
+    }
+  }
+  t.querySelectorAll('.pt-btn').forEach(function(b){b.addEventListener('click',function(){set(b.getAttribute('data-c'));});});
 })();
 </script>
 </body>
